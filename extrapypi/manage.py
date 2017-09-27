@@ -44,9 +44,9 @@ def init_wsgi_file():
     """Sample wsgi file for extra-pypi"""
 
 
-@cli.command("collect-static")
+@cli.command("get-static")
 def collect_static():
-    """Collect static to given location"""
+    """Get static files location"""
 
 
 if __name__ == "__main__":

@@ -28,10 +28,14 @@ setup(
     platforms='any',
     install_requires=[
         'Flask>=0.11',
-        'sqlalchemy',
         'Flask-SQLAlchemy',
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
-    extras_require={'tests': 'pytest', 'docs': 'sphinx'}
+    extras_require={
+        'tests': ['pytest', 'pytest-flask'],
+        'docs': ['sphinx'],
+        'mysql': ['pymysql'],
+        'postgres': ['psycopg2']
+    }
 )
