@@ -37,5 +37,10 @@ setup(
         'docs': ['sphinx'],
         'mysql': ['pymysql'],
         'postgres': ['psycopg2']
+    },
+    entry_points={
+        'console_scripts': [
+            'extrapypi = extrapypi.manage:cli'
+        ]
     }
 )
