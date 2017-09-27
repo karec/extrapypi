@@ -34,6 +34,8 @@ Configuration options
 ================== ===========================
 NAME               Description
 ================== ===========================
+BASE_DIR           Base directory, by default used by SQLALCHEMY_URI and PACKAGES_ROOT
+================== ===========================
 SQLALCHEMY_URI     SQLAlchemy connexion string
 ================== ===========================
 STATIC_URL         Url for static files
@@ -43,9 +45,12 @@ PACKAGES_ROOT      Location for packages upload
 """
 import os
 
+# Base settings
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 # SQLAlchemy settings
-SQLALCHEMY_URI = "sqlite:///:memory:"
+SQLALCHEMY_URI = "sqlite://{}/extrapypi.db".format(BASE_DIR)
 
 
 # Flask settings
@@ -53,7 +58,6 @@ STATIC_URL = '/static/'
 
 
 # Extra-pypi settings
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PACKAGES_ROOT = "{}/packages".format(BASE_DIR)
 
 

@@ -1,13 +1,25 @@
 def test_ping(client):
     """Test simple ping endpoint"""
+    res = client.get('/ping')
+    assert b'pong' in res.data
 
 
 def test_simple(client):
     """Test simple view index"""
+    res = client.get('/simple/')
+    assert b'test-package' in res.data
+    assert b'other-package' in res.data
 
 
 def test_simple_package(client):
     """Test simple index for specific package"""
+    # res = client.get('/simple/test-package')
+    # assert b'test-package-0.1.tar.gz' in res.data
+
+
+def test_simple_package_download(client):
+    """Test download of a package version"""
+    # res = client.get('/simple/test-package/')
 
 
 def test_list_packages(client):
