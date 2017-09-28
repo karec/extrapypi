@@ -4,8 +4,13 @@ from flask import request
 
 
 def simple():
+    """Simple view index used only on GET requests
+
+    Used to list packages
+    """
     if request.method == 'POST':
-        pass
+        print("debug")
+        print(dict(request.form))
     return "test-package<br />other-package"
 
 

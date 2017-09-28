@@ -18,6 +18,17 @@ extrapypi init
 extrapypi run
 ```
 
+### Running server
+
+extrapypi use flask cli, `extrapypi` command is only a hook to `extrapypi.manage` that include several commands 
+but anything present in flask script can be used for extrapypi too.
+
+For exemple you can start application using `flask run` with debug on like this :
+
+```
+FLASK_DEBUG=1 flask run
+```
+
 ### Running test
 
 
