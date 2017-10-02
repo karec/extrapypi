@@ -1,6 +1,9 @@
 """Views for handling simple index like original pypi
 """
+import logging
 from flask import request
+
+log = logging.getLogger("extrapypi")
 
 
 def simple():
@@ -9,8 +12,8 @@ def simple():
     Used to list packages
     """
     if request.method == 'POST':
-        print("debug")
-        print(dict(request.form))
+        log.info("debug")
+        log.info(request.form.getlist('classifiers'))
     return "test-package<br />other-package"
 
 

@@ -22,6 +22,7 @@ You can create a wsgi file like this for running gunicorn or uwsgi :
     application = create_app()
 """
 import os
+import logging.config
 from flask import Flask
 
 from extrapypi import views
@@ -33,6 +34,7 @@ def create_app(testing=False, config=None):
     app = Flask('extra-pypi')
 
     configure_app(app, testing, config)
+    configure_logging(app)
     register_views(app)
 
     return app
@@ -69,3 +71,8 @@ def register_views(app):
         views.download_package,
         methods=['GET']
     )
+
+
+def configure_logging(app):
+    """Configure loggers"""
+    logging.config.dictConfig(app.config['LOGGING_CONFIG'])

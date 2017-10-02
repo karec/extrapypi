@@ -62,3 +62,34 @@ PACKAGES_ROOT = "{}/packages".format(BASE_DIR)
 
 
 # Logging
+LOGGING_CONFIG = {
+    'version': 1,
+    'root': {
+        'level': 'NOTSET',
+        'handlers': ['default'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s: %(levelname)s / %(name)s] %(message)s',
+        },
+    },
+    'handlers': {
+        'default': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'extrapypi': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'alembic.runtime.migration': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': False
+        },
+    }
+}
