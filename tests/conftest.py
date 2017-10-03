@@ -22,7 +22,7 @@ def db(app):
 
 
 @pytest.fixture
-def test_packages(db):
+def packages(db):
     user = User(
         username="admin",
         email="email@admin",
@@ -37,3 +37,8 @@ def test_packages(db):
 
     db.session.add_all([user, package_test, package_other])
     db.session.commit()
+
+
+@pytest.fixture
+def test_releases(packages):
+    pass
