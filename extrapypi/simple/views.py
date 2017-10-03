@@ -21,11 +21,11 @@ def simple():
     Used to list packages
     """
     if request.method == 'POST':
-        log.debug("New release")
         action = request.form.get(':action')
         if action == 'register':
             abort(410, "old style pre-register not supported")
         elif action == 'file_upload':
+            log.debug("registering new release")
             pass
         else:
             abort(400, "action not supported")
