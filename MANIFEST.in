@@ -1,0 +1,2 @@
+graft extrapypi/templates
+graft extrapypi/static

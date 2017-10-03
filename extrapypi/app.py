@@ -32,9 +32,15 @@ from extrapypi import simple
 def create_app(testing=False, config=None):
     """Main application factory
     """
-    app = Flask('extra-pypi')
-    print(app.root_path)
-    print(app.template_folder)
+
+    # the following line ensure that we search templates
+    # based on the app file, not working_directory
+    tmpl_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        'templates'
+    )
+
+    app = Flask('extra-pypi', template_folder=tmpl_path)
     configure_app(app, testing, config)
     configure_logging(app)
     configure_extensions(app)
