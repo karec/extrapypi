@@ -4,9 +4,9 @@ def test_ping(client):
     assert b'pong' in res.data
 
 
-def test_simple(client, db, packages):
+def test_simple(client, db, packages, admin_headers):
     """Test simple view index"""
-    res = client.get('/simple/')
+    res = client.get('/simple/', headers=admin_headers)
     assert b'test-package' in res.data
     assert b'other-package' in res.data
 
