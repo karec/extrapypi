@@ -25,8 +25,9 @@ import os
 import logging.config
 from flask import Flask
 
-from extrapypi.extensions import db
 from extrapypi import simple, utils
+from extrapypi.commons import login
+from extrapypi.extensions import db, login_manager
 
 
 def create_app(testing=False, config=None):
@@ -52,6 +53,10 @@ def create_app(testing=False, config=None):
 def configure_extensions(app):
     """Init all extensions"""
     db.init_app(app)
+
+    login_manager.init_app(app)
+    login_manager.user_loader(login.user_loader)
+    login_manager.request_loader(login.load_user_from_request)
 
 
 def configure_app(app, testing, config):

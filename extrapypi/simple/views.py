@@ -2,7 +2,8 @@
 """
 import pprint
 import logging
-from flask import request, render_template, Blueprint
+from flask_login import login_required
+from flask import request, render_template, Blueprint, abort, current_app
 
 from extrapypi.models import Package
 
@@ -13,14 +14,21 @@ blueprint = Blueprint('simple', __name__, url_prefix='/simple')
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
+@login_required
 def simple():
     """Simple view index used only on GET requests
 
     Used to list packages
     """
     if request.method == 'POST':
-        log.debug("debug")
-        log.debug(request.form.getlist('classifiers'))
+        log.debug("New release")
+        action = request.form.get(':action')
+        if action == 'register':
+            abort(410, "old style pre-register not supported")
+        elif action == 'file_upload':
+            pass
+        else:
+            abort(400, "action not supported")
         log.debug(pprint.pformat(dict(request.form)))
     else:
         packages = Package.query.all()
