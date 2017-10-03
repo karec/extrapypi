@@ -24,7 +24,7 @@ def simple():
         log.debug(pprint.pformat(dict(request.form)))
     else:
         packages = Package.query.all()
-        return render_template('simple/simple.html', packages=packages)
+        return render_template('index.html', packages=packages)
         log.debug("install")
     return "test-package<br />other-package"
 

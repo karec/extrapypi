@@ -33,7 +33,8 @@ def create_app(testing=False, config=None):
     """Main application factory
     """
     app = Flask('extra-pypi')
-
+    print(app.root_path)
+    print(app.template_folder)
     configure_app(app, testing, config)
     configure_logging(app)
     configure_extensions(app)
