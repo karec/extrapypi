@@ -2,10 +2,10 @@ import os
 import click
 from flask.cli import FlaskGroup
 from flask_migrate import MigrateCommand
+from extrapypi.app import create_app
 
 
 def create_pypi(info):
-    from extrapypi.app import create_app
     return create_app(
         config=os.environ.get('EXTRAPYPI_CONFIG', None)
     )
@@ -19,6 +19,9 @@ def cli():
 @cli.command("init")
 def init():
     """Init database and create an admin user"""
+    from extrapypi.extensions import db
+    from extrapypi import models
+    db.create_all()
 
 
 @cli.command("create-user")

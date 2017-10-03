@@ -25,7 +25,8 @@ import os
 import logging.config
 from flask import Flask
 
-from extrapypi import views
+from extrapypi.extensions import db
+from extrapypi import simple
 
 
 def create_app(testing=False, config=None):
@@ -35,9 +36,15 @@ def create_app(testing=False, config=None):
 
     configure_app(app, testing, config)
     configure_logging(app)
-    register_views(app)
+    configure_extensions(app)
+    register_blueprints(app)
 
     return app
+
+
+def configure_extensions(app):
+    """Init all extensions"""
+    db.init_app(app)
 
 
 def configure_app(app, testing, config):
@@ -54,23 +61,9 @@ def configure_app(app, testing, config):
         app.config.from_pyfile(config)
 
 
-def register_views(app):
+def register_blueprints(app):
     """Register all views for application"""
-    app.add_url_rule('/ping', 'ping', views.ping, methods=['GET'])
-
-    app.add_url_rule('/simple/', 'simple', views.simple, methods=['GET', 'POST'])
-    app.add_url_rule(
-        '/simple/<string:package>/',
-        'package-view',
-        views.package_view,
-        methods=['GET']
-    )
-    app.add_url_rule(
-        '/simple/<string:package>/<path:archive>',
-        'download-package',
-        views.download_package,
-        methods=['GET']
-    )
+    app.register_blueprint(simple.views.blueprint)
 
 
 def configure_logging(app):

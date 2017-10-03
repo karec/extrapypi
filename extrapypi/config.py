@@ -50,7 +50,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # SQLAlchemy settings
-SQLALCHEMY_URI = "sqlite://{}/extrapypi.db".format(BASE_DIR)
+SQLALCHEMY_DATABASE_URI = "sqlite:///{}/extrapypi.db".format(BASE_DIR)
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 # Flask settings
@@ -75,7 +76,7 @@ LOGGING_CONFIG = {
     },
     'handlers': {
         'default': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
@@ -83,7 +84,7 @@ LOGGING_CONFIG = {
     'loggers': {
         'extrapypi': {
             'handlers': ['default'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': False,
         },
         'alembic.runtime.migration': {
