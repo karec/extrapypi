@@ -26,7 +26,7 @@ import logging.config
 from flask import Flask
 
 from extrapypi.extensions import db
-from extrapypi import simple
+from extrapypi import simple, utils
 
 
 def create_app(testing=False, config=None):
@@ -71,6 +71,7 @@ def configure_app(app, testing, config):
 def register_blueprints(app):
     """Register all views for application"""
     app.register_blueprint(simple.views.blueprint)
+    app.register_blueprint(utils.views.blueprint)
 
 
 def configure_logging(app):
