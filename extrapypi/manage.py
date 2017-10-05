@@ -1,8 +1,9 @@
 import os
 import click
 from flask.cli import FlaskGroup
-from flask_migrate import MigrateCommand
 from extrapypi.app import create_app
+from flask_migrate import MigrateCommand
+from passlib.apps import custom_app_context
 
 
 def create_pypi(info):
@@ -17,11 +18,26 @@ def cli():
 
 
 @cli.command("init")
-def init():
+@click.option('--user', default='admin', help="first user to create")
+@click.option('--password', default='admin', help="user password")
+def init(user, password):
     """Init database and create an admin user"""
     from extrapypi.extensions import db
     from extrapypi import models
+    click.echo("Creating database...")
     db.create_all()
+    click.echo("Database created")
+
+    click.echo("Creating user %s" % user)
+    pwd = custom_app_context.hash(password)
+    user = models.User(
+        username=user,
+        email="email@admin.com",
+        password_hash=pwd
+    )
+    db.session.add(user)
+    db.session.commit()
+    click.echo("User created")
 
 
 @cli.command("create-user")

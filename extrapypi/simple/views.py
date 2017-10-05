@@ -6,6 +6,7 @@ from flask_login import login_required
 from flask import request, render_template, Blueprint, abort, current_app
 
 from extrapypi.models import Package
+from extrapypi.forms.packages import UploadForm
 
 log = logging.getLogger("extrapypi")
 
@@ -20,16 +21,20 @@ def simple():
 
     Used to list packages
     """
-    if request.method == 'POST':
+    form = UploadForm()
+    if form.validate_on_submit():
         action = request.form.get(':action')
-        if action == 'register':
+        if form.action == 'register':
             abort(410, "old style pre-register not supported")
-        elif action == 'file_upload':
-            log.debug("registering new release")
+        elif form.action == 'file_upload':
+            log.info("registering new release")
             pass
         else:
             abort(400, "action not supported")
         log.debug(pprint.pformat(dict(request.form)))
+    elif request.method == "POST":
+        print(form.errors)
+        print(pprint.pformat(dict(request.form)))
     else:
         packages = Package.query.all()
         return render_template('simple/simple.html', packages=packages)
