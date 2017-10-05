@@ -1,0 +1,6 @@
+[run]
+source =
+       extrapypi
+omit =
+     *tests*
+     extrapypi/manage.py

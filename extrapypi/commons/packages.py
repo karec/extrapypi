@@ -6,12 +6,18 @@ from extrapypi.extensions import db
 from extrapypi.models import Package
 
 
-def create_package(data):
+def create_package(data, packages_root):
     """Create a package for a given release
     if the package don't exists already
 
     :param dict data: request data to use to create package
     """
+    p = Package(
+        name=data.get('name'),
+        summary=data.get('summary')
+    )
+
+    db.session.add(p)
 
 
 def register_release(data, config):

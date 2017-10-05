@@ -1,12 +1,18 @@
 """Views for handling simple index like original pypi
 """
-import pprint
 import logging
 from flask_login import login_required
-from flask import request, render_template, Blueprint, abort, current_app
+from flask import (
+    request,
+    render_template,
+    Blueprint,
+    abort,
+    send_file,
+    current_app
+)
 
 from extrapypi.models import Package
-from extrapypi.forms.packages import UploadForm
+from extrapypi.storage import LocalStorage
 
 log = logging.getLogger("extrapypi")
 
@@ -21,20 +27,15 @@ def simple():
 
     Used to list packages
     """
-    form = UploadForm()
-    if form.validate_on_submit():
+    if request.method == 'POST':
         action = request.form.get(':action')
-        if form.action == 'register':
+        if action == 'register':
             abort(410, "old style pre-register not supported")
-        elif form.action == 'file_upload':
+        elif action == 'file_upload':
             log.info("registering new release")
             pass
         else:
             abort(400, "action not supported")
-        log.debug(pprint.pformat(dict(request.form)))
-    elif request.method == "POST":
-        print(form.errors)
-        print(pprint.pformat(dict(request.form)))
     else:
         packages = Package.query.all()
         return render_template('simple/simple.html', packages=packages)
@@ -50,6 +51,7 @@ def package_view(package):
     return "extrapypi-0.1.tar.gz"
 
 
-@blueprint.route('/<string:package>/<path:archive>', methods=['GET'])
-def download_package(package, archive):
-    return "ok"
+@blueprint.route('/<string:package>/<path:source>', methods=['GET'])
+def download_package(package, source):
+    storage = LocalStorage(packages_root=current_app.config['PACKAGES_ROOT'])
+    return send_file(storage.get_file(package, source))
