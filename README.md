@@ -1,6 +1,29 @@
 # extrapypi
 
+[![Build Status](https://travis-ci.org/karec/extrapypi.svg?branch=master)](https://travis-ci.org/karec/extrapypi)
+[![Coverage Status](https://coveralls.io/repos/github/karec/extrapypi/badge.svg?branch=master)](https://coveralls.io/github/karec/extrapypi?branch=master)
+
 External pypi server with web ui and basics permissions management
+
+
+## Features
+
+* Upload packages from twine / setuptools
+* Install packages with pip using only extra-index option
+* Basics permissions management using roles (currently admin, developer, installer, builder)
+* Easy deployment / installation using the WSGI server you want
+* MySQL, PostgresSQL and SQLite support
+* Extensible storage system
+* CLI tools to help you deploy / init / test extrapypi
+* Basic dashboard to visualize packages and users
+* Codebase aim to be simple and hackable
+
+## Extrapypi goals
+
+extrapypi don't mirror official pypi packages, and will not. It's just not build with 
+this goal in mind.
+extrapypi is just here to provide you an extra index to upload and install private packages
+simply.
 
 
 ## Development
