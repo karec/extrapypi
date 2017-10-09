@@ -63,7 +63,7 @@ def package_view(package):
                            files=files, package=package_obj)
 
 
-@blueprint.route('/<string:package>/<path:source>/', methods=['GET'])
+@blueprint.route('/<string:package>/<path:source>', methods=['GET'])
 @login_required
 def download_package(package, source):
     store = get_store(

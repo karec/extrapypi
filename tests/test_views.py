@@ -16,16 +16,27 @@ def test_simple_package(client, packages_dirs, releases_dirs, admin_headers):
     res = client.get('/simple/test-package/', headers=admin_headers)
     assert b'test-package-0.1' in res.data
 
+    # bad package
+    resp = client.get('/simple/bad-package/', headers=admin_headers)
+    assert resp.status_code == 404
+
 
 def test_simple_package_download(client, packages_dirs,
                                  releases_dirs, admin_headers):
     """Test download of a package version"""
     res = client.get(
-        '/simple/test-package/test-package-0.1.tar.gz/',
+        '/simple/test-package/test-package-0.1.tar.gz',
         headers=admin_headers
     )
     assert res.status_code == 200
     assert res.data == b'insidepackage'
+
+    # bad package
+    resp = client.get(
+        '/simple/bad-package/test-package-0.1.tar.gz',
+        headers=admin_headers
+    )
+    assert resp.status_code == 404
 
 
 def test_list_packages(client):
@@ -59,6 +70,18 @@ def test_package_upload(client, tmpdir, admin_headers):
     resp = client.post('/simple/', headers=admin_headers, data=data)
     print(resp.data)
     assert resp.status_code == 200
+
+    # bad action
+    resp = client.post('/simple/', headers=admin_headers,
+                       data={':action': 'bad'})
+    assert resp.status_code == 400
+
+    # bad data
+    data = {
+        ':action': 'file_upload'
+    }
+    resp = client.post('/simple/', headers=admin_headers, data=data)
+    assert resp.status_code == 400
 
 
 def test_list_users(client):
