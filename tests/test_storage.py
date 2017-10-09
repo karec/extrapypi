@@ -26,19 +26,24 @@ def test_base_storage():
         bs.create_release(None, None)
 
 
-def test_local_storage(app, db, tmpdir, packages):
+def test_local_storage(app, db, tmpdir, packages, releases, werkzeug_file):
     """Test local storage"""
     with pytest.raises(RuntimeError):
         ls = LocalStorage()
 
     package = db.session.query(Package).first()
-    r = tmpdir.mkdir(package.name).join(package.name + "-0.1.tar.gz")
-    r.write("test-release")
 
     ls = LocalStorage(packages_root=str(tmpdir))
+    assert ls.create_package(package) is True
+
+    r = tmpdir.join(package.name, package.name + "-0.1.tar.gz")
+    r.write("test-release")
+
     assert isinstance(ls.get_files(package), list)
     assert len(ls.get_files(package)) == 1
     assert ls.get_files(package)[0] == package.name + "-0.1.tar.gz"
+    assert ls.create_release(package, werkzeug_file) is True
+    assert len(ls.get_files(package, package.releases[0])) == 1
 
     f = ls.get_file(package, package.name + "-0.1.tar.gz")
     with open(f, 'r') as f:
@@ -46,7 +51,10 @@ def test_local_storage(app, db, tmpdir, packages):
 
     # test with bad package
     package.name = "baddir"
+    ls = LocalStorage(packages_root="bad/dir/location")
     assert ls.get_files(package) is None
+    assert ls.create_package(package) is False
+    assert ls.create_release(package, werkzeug_file) is False
 
     f = ls.get_files(package)
     assert f is None

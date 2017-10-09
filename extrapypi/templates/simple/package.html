@@ -1,0 +1,4 @@
+{% for f in files %}
+<a href="{{ url_for('simple.download_package', package=package.name, source=f) }}">{{f}}</a>
+<br/>
+{% endfor %}

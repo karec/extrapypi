@@ -1,3 +1,3 @@
 {% for package in packages %}
-  <a href="{{ url_for('simple.package_view', package=package.name) }}>{{package.name}}</a>"
+  <a href="{{ url_for('simple.package_view', package=package.name) }}">{{package.name}}</a>
 {% endfor%}

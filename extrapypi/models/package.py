@@ -1,4 +1,3 @@
-import os
 import datetime
 
 from extrapypi.extensions import db
@@ -22,16 +21,5 @@ class Package(db.Model):
 
     maintainers = db.relationship('User', secondary=package_maintainers, lazy='dynamic', backref='packages')
 
-    @property
-    def package_path(self, config):
-        """Utility property, used to find directory of a package on the server,
-        based on current app config
-
-        :param dict config: current app configuration
-        :return: path of the package on the server
-        :rtype: str
-        """
-        return os.path.join(config['PACKAGES_ROOT'], self.name)
-
     def __repr__(self):
-        return "<Package {name}>".format(self)
+        return "<Package {0.name}>".format(self)

@@ -16,4 +16,4 @@ class Release(db.Model):
     package = db.relationship('Package', backref=db.backref('releases', lazy='dynamic'), lazy='joined')
 
     def __repr__(self):
-        return "<Release {version} for package {package.name}>".format(self)
+        return "<Release {0.version} for package {0.package.name}>".format(self)

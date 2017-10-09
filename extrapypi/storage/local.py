@@ -19,6 +19,35 @@ class LocalStorage(BaseStorage):
             raise RuntimeError("Cannot use LocalStorage without PACKAGES_ROOT set")
         self.packages_root = packages_root
 
+    def create_package(self, package):
+        """Create new directory for a given package
+        """
+        path = os.path.join(
+            self.packages_root,
+            package.name
+        )
+        try:
+            os.mkdir(path)
+            return True
+        except OSError:
+            return False
+
+    def create_release(self, package, release_file):
+        """Copy release file inside package directory
+
+        If package directory does not exists, it will create it before
+        """
+        package_path = os.path.join(
+            self.packages_root,
+            package.name
+        )
+        if not os.path.isdir(package_path):
+            if not self.create_package(package):
+                return False
+        release_path = os.path.join(package_path, release_file.filename)
+        release_file.save(release_path)
+        return True
+
     def get_files(self, package, release=None):
         """Get all files associated to a package
 
@@ -31,10 +60,16 @@ class LocalStorage(BaseStorage):
 
         files = os.listdir(path)
         if release is not None:
-            regex = '{}-(?P<version>[0-9\.]*)'.format(package.name)
-            regex = re.compile(regex)
+            regex = '{}-(?P<version>[0-9\.]*)\..*'.format(package.name)
+            r = re.compile(regex)
             v = release.version
-            files = [f for f in files if regex.match(f).group('version') == v]
+            print("v", v, "files", files)
+            files = filter(
+                lambda f: r.match(f) and r.match(f).group('version') == v,
+                files
+            )
+            files = list(files)
+            print("filtered ", files)
         return files
 
     def get_file(self, package, file, release=None):

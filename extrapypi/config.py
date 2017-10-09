@@ -40,7 +40,9 @@ SQLALCHEMY_URI     SQLAlchemy connexion string
 ================== ===========================
 STATIC_URL         Url for static files
 ================== ===========================
-PACKAGES_ROOT      Location for packages upload
+STORAGE            Storage class name to use
+================== ===========================
+STORAGE_PARAMS     Storage class parameters, see specific storages documentation for more details
 ================== ===========================
 """
 import os
@@ -58,8 +60,11 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 STATIC_URL = '/static/'
 
 
-# Extra-pypi settings
-PACKAGES_ROOT = "{}/packages".format(BASE_DIR)
+# Storage settings
+STORAGE = 'LocalStorage'
+STORAGE_PARAMS = {
+    'packages_root': "{}/packages".format(BASE_DIR)
+}
 
 
 # Logging
