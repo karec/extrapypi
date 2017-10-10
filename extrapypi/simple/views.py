@@ -30,6 +30,7 @@ def simple():
     """
     if request.method == 'POST':
         action = request.form.get(':action')
+        log.info(dict(request.form))
         if action != 'file_upload':
             abort(400, "method not supported")
 

@@ -88,7 +88,7 @@ def create_release(data, config, files):
             download_url=data['download_url'],
             home_page=data['home_page'],
             version=data['version'],
-            keywords=','.join(data.get('keywords', "")),
+            keywords=data.get('keywords'),
             md5_digest=data['md5_digest'],
             package=package
         )

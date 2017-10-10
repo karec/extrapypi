@@ -39,12 +39,48 @@ def test_simple_package_download(client, packages_dirs,
     assert resp.status_code == 404
 
 
-def test_list_packages(client):
-    """Test list packages view"""
+def test_list_packages(client, packages, admin_headers):
+    """Test list packages dashboard view"""
+    res = client.get('/dashboard/', headers=admin_headers)
+    assert res.status_code == 200
+    assert b'test-package' in res.data
+    assert b'other-package' in res.data
 
 
-def test_package_details(client):
+def test_search_packages(client, packages, admin_headers):
+    """Test search packages"""
+    res = client.post('/dashboard/search/', data={"search": "other"})
+    assert res.status_code == 200
+    assert b'other-package' in res.data
+    assert b'test-package' not in res.data
+
+
+def test_package_details(client, packages, releases):
     """Test view for package details"""
+    res = client.get('/dashboard/test-package/')
+    assert res.status_code == 200
+    assert b'test' in res.data
+    assert b'0.1' in res.data
+    assert b'test,other' in res.data
+    assert b'badmd5' in res.data
+
+    # bad package
+    res = client.get('/dashboard/bad-package/')
+    assert res.status_code == 404
+
+
+def test_release_details(client, packages, releases):
+    """Test view for release details"""
+    res = client.get('/dashboard/test-package/1/')
+    assert res.status_code == 200
+    assert b'test' in res.data
+    assert b'0.1' in res.data
+    assert b'test,other' in res.data
+    assert b'badmd5' in res.data
+
+    # bad release
+    res = client.get('/dashboard/test-package/99/')
+    assert res.status_code == 404
 
 
 def test_delete_package(client):

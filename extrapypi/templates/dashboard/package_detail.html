@@ -39,7 +39,7 @@
   <div class="col">
     <h3>Other releases</h3>
     {% for r in releases %}
-    {{r}}
+    <a href="{{url_for('dashboard.release', package=release.package.name, release_id=r.id)}}">{{r.version}}</a>
     {% endfor %}
   </div>
 </div>
