@@ -15,7 +15,7 @@
     {% for package in packages %}
     <tr>
       <td>{{package.id}}</td>
-      <td>{{package.name}}</td>
+      <td><a href="{{url_for('dashboard.package', package=package.name)}}">{{package.name}}</a></td>
       <td>{{package.summary}}</td>
       <td>
         {% if package.updated_at %}

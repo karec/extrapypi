@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>{{release.package.name}} {{release.version}}</h1>
+<div class="row mt-xl-3">
+  <div class="col">
+    {{release.description}}
+  </div>
+</div>
+<div class="row mt-xl-3">
+  <div class="col">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>filename</th>
+        </tr>
+      </thead>
+      {% for f in files %}
+      <tr>
+        <td>
+          <a href="{{url_for('simple.download_package', package=release.package.name, source=f)}}">{{f}}</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    download url : {{release.download_url}}
+    <br/>
+    home page : {{release.home_page}}
+    <br/>
+    keywords : {{release.keywords}}
+    <br/>
+    md5 digest : {{release.md5_digest}}
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <h3>Other releases</h3>
+    {% for r in releases %}
+    {{r}}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

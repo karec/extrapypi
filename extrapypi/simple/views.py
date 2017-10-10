@@ -13,7 +13,6 @@ from flask import (
 )
 
 from extrapypi.models import Package
-from extrapypi.storage import LocalStorage
 from extrapypi.commons.packages import create_release, get_store
 
 log = logging.getLogger("extrapypi")

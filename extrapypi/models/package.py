@@ -1,4 +1,5 @@
 import datetime
+from pkg_resources import parse_version
 
 from extrapypi.extensions import db
 
@@ -20,6 +21,17 @@ class Package(db.Model):
     updated_at = db.Column(db.DateTime, onupdate=datetime.datetime.utcnow)
 
     maintainers = db.relationship('User', secondary=package_maintainers, lazy='dynamic', backref='packages')
+
+    @property
+    def sorted_releases(self):
+        releases = self.releases.all()
+        return sorted(
+            releases, key=lambda r: parse_version(r.version)
+        )
+
+    @property
+    def latest_release(self):
+        return next(iter(self.sorted_releases), None)
 
     def __repr__(self):
         return "<Package {0.name}>".format(self)

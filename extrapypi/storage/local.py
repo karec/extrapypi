@@ -63,13 +63,11 @@ class LocalStorage(BaseStorage):
             regex = '{}-(?P<version>[0-9\.]*)\..*'.format(package.name)
             r = re.compile(regex)
             v = release.version
-            print("v", v, "files", files)
             files = filter(
                 lambda f: r.match(f) and r.match(f).group('version') == v,
                 files
             )
             files = list(files)
-            print("filtered ", files)
         return files
 
     def get_file(self, package, file, release=None):
