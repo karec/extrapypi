@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>Packages</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>package</th>
+      <th>summary</th>
+      <th>last update</th>
+      <th>actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for package in packages %}
+    <tr>
+      <td>{{package.id}}</td>
+      <td>{{package.name}}</td>
+      <td>{{package.summary}}</td>
+      <td>
+        {% if package.updated_at %}
+        {{package.updated_at}}
+        {% else %}
+        {{package.created_at.strftime("%Y-%m-%d")}}
+        {% endif %}
+      </td>
+      <td></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -25,8 +25,8 @@ import os
 import logging.config
 from flask import Flask
 
-from extrapypi import simple, utils
 from extrapypi.commons import login
+from extrapypi import simple, utils, dashboard
 from extrapypi.extensions import db, login_manager
 
 
@@ -40,8 +40,16 @@ def create_app(testing=False, config=None):
         os.path.dirname(os.path.abspath(__file__)),
         'templates'
     )
+    static_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        'static'
+    )
 
-    app = Flask('extra-pypi', template_folder=tmpl_path)
+    app = Flask(
+        'extra-pypi',
+        template_folder=tmpl_path,
+        static_folder=static_path
+    )
     configure_app(app, testing, config)
     configure_logging(app)
     configure_extensions(app)
@@ -77,6 +85,7 @@ def register_blueprints(app):
     """Register all views for application"""
     app.register_blueprint(simple.views.blueprint)
     app.register_blueprint(utils.views.blueprint)
+    app.register_blueprint(dashboard.views.blueprint)
 
 
 def configure_logging(app):
