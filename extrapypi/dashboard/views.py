@@ -2,10 +2,12 @@
 """
 import logging
 from sqlalchemy.orm.exc import NoResultFound
-from flask import Blueprint, render_template, abort, request, current_app as app
+from flask import Blueprint, render_template, abort, request,\
+    current_app as app, flash
 
-from extrapypi.models import Package, Release
+from extrapypi.forms.user import UserForm
 from extrapypi.commons.packages import get_store
+from extrapypi.models import Package, Release, User
 
 
 log = logging.getLogger("extrapypi")
@@ -71,3 +73,22 @@ def release(package, release_id):
                            release=release,
                            files=files,
                            releases=releases)
+
+
+@blueprint.route('/users/', methods=['GET'])
+def users_list():
+    """List user in dashboard
+    """
+    users = User.query.all()
+    return render_template("dashboard/users.html", users=users)
+
+
+@blueprint.route('/users/<int:user_id>', methods=['GET', 'POST'])
+def user_detail(user_id):
+    user = User.query.get_or_404(user_id)
+    form = UserForm(request.form, obj=user)
+    if request.method == 'POST' and form.validate():
+        print(dir(form))
+        flash("User updated")
+        return "ok"
+    return render_template("dashboard/user_detail.html", form=form, user=user)

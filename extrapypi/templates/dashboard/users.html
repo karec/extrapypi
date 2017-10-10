@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>Users</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>username</th>
+      <th>email</th>
+      <th>status</th>
+      <th>actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td>{{user.id}}</td>
+      <td><a href="#">{{user.username}}</a></td>
+      <td>{{user.email}}</td>
+      <td>
+        {% if user.is_active %}
+        <span class="badge badge-success">active</span>
+        {% else %}
+        <span class="badge badge-error">inactive</span>
+        {% endif %}
+      </td>
+      <td></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

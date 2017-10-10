@@ -58,6 +58,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Flask settings
 STATIC_URL = '/static/'
+SECRET_KEY = 'changeit'
 
 
 # Storage settings
