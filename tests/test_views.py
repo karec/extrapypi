@@ -133,8 +133,26 @@ def test_list_users(client, users, admin_headers):
         assert u.email in data
 
 
-def test_create_users(client):
+def test_create_users(client, admin_headers):
     """Test creation of a new user"""
+    # just getting the page
+    resp = client.get('/dashboard/users/create', headers=admin_headers)
+    assert resp.status_code == 200
+
+    data = {
+        'username': 'newuser',
+        'email': 'newuser@mail.com',
+        'password': 'test',
+        'confirm': 'test',
+        'active': 'y'
+    }
+    resp = client.post('/dashboard/users/create',
+                       headers=admin_headers, data=data)
+    assert resp.status_code == 302
+
+    resp = client.get('/dashboard/users/')
+    assert 'newuser' in resp.get_data(as_text=True)
+    assert 'email' in resp.get_data(as_text=True)
 
 
 def test_view_user(client, user, admin_headers):
@@ -153,7 +171,8 @@ def test_update_user(client, user, admin_headers):
         'email': user.email,
         'active': 'y'
     }
-    resp = client.post('/dashboard/users/%d' % user.id, headers=admin_headers, data=data)
+    resp = client.post('/dashboard/users/%d' % user.id, headers=admin_headers,
+                       data=data)
     assert resp.status_code == 302
 
     user = User.query.filter_by(id=user.id).first()

@@ -1,14 +1,15 @@
 """Views for dashboard
 """
 import logging
+from passlib.apps import custom_app_context
 from sqlalchemy.orm.exc import NoResultFound
 from flask import Blueprint, render_template, abort, request,\
     current_app as app, flash, redirect, url_for
 
 from extrapypi.extensions import csrf, db
-from extrapypi.forms.user import UserForm
 from extrapypi.commons.packages import get_store
 from extrapypi.models import Package, Release, User
+from extrapypi.forms.user import UserForm, UserCreateForm
 
 
 log = logging.getLogger("extrapypi")
@@ -85,6 +86,27 @@ def users_list():
     return render_template("dashboard/users.html", users=users)
 
 
+@blueprint.route('/users/create', methods=['GET', 'POST'])
+def create_user():
+    """Create a new user
+    """
+    form = UserCreateForm(request.form)
+    if form.validate_on_submit():
+        u = User(
+            username=form.username.data,
+            email=form.email.data,
+            is_active=form.is_active.data
+        )
+        u.password_hash = custom_app_context.hash(form.password.data)
+
+        db.session.add(u)
+        db.session.commit()
+
+        flash("User created")
+        return redirect(url_for('dashboard.users_list'))
+    return render_template("dashboard/user_create.html", form=form)
+
+
 @blueprint.route('/users/<int:user_id>', methods=['GET', 'POST'])
 def user_detail(user_id):
     user = User.query.get_or_404(user_id)
@@ -94,7 +116,6 @@ def user_detail(user_id):
         form.populate_obj(user)
         db.session.commit()
         return redirect(url_for('dashboard.users_list'))
-    print(form.errors)
     return render_template("dashboard/user_detail.html", form=form, user=user)
 
 

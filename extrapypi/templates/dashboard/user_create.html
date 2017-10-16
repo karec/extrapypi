@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% from "_bootstrapform.html" import render_form %}
+
+{% block body %}
+<h1>Create user</h1>
+<form action="{{url_for('dashboard.create_user')}}" method="POST">
+  {{ render_form(form) }}
+  <input type="submit" value="validate" class="btn btn-primary"/>
+</form>
+{% endblock %}
