@@ -191,7 +191,7 @@ def releases(db, request, tmpdir):
 
 
 @pytest.fixture
-def releases_dirs(app, request, db, packages_dirs, tmpdir):
+def releases_dirs(app, request, db, tmpdir):
     pdir = app.config['STORAGE_PARAMS']['packages_root']
     package_test = Package(name="test-package")
     os.mkdir(os.path.join(pdir, 'test-package'))
