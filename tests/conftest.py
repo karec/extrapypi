@@ -10,25 +10,28 @@ from extrapypi.extensions import db as _db
 from extrapypi.models import Package, User, Release
 
 
-@pytest.fixture
-def app(tmpdir):
+@pytest.fixture(scope='session')
+def app(tmpdir_factory):
+    pkgs = tmpdir_factory.mktemp("packages")
     app = create_app(testing=True)
     app.config['STORAGE'] = 'LocalStorage'
     app.config['STORAGE_PARAMS'] = {
-        'packages_root': str(tmpdir)
+        'packages_root': str(pkgs)
     }
     return app
 
 
-@pytest.fixture
-def db(app):
+@pytest.fixture(scope='session')
+def db(app, request):
 
     _db.app = app
     _db.create_all()
 
-    yield _db
+    def fin():
+        _db.drop_all()
 
-    _db.drop_all()
+    request.addfinalizer(fin)
+    return _db
 
 
 @pytest.fixture
@@ -71,7 +74,12 @@ def users(db):
     db.session.add_all(users)
     db.session.commit()
 
-    return users
+    yield users
+
+    for u in users:
+        db.session.delete(u)
+
+    db.session.commit()
 
 
 @pytest.fixture
@@ -83,7 +91,10 @@ def user(db):
     )
     db.session.add(u)
     db.session.commit()
-    return u
+    yield u
+
+    db.session.delete(u)
+    db.session.commit()
 
 
 @pytest.fixture
@@ -99,7 +110,7 @@ def werkzeug_file(tmpdir):
 
 
 @pytest.fixture
-def packages(db, admin_user, app):
+def packages(db, request, admin_user, app):
     package_test = Package(name="test-package")
     package_other = Package(name="other-package")
 
@@ -110,6 +121,14 @@ def packages(db, admin_user, app):
     db.session.commit()
 
     packages = [package_test, package_other]
+
+    def fin():
+        for p in packages:
+            print(p)
+            db.session.delete(p)
+        db.session.commit()
+
+    request.addfinalizer(fin)
     return packages
 
 
@@ -132,12 +151,24 @@ def packages_dirs(db, admin_user, app):
     packages = [package_test, package_other]
     yield packages
 
+    for p in packages:
+        db.session.delete(p)
+    db.session.commit()
+
     shutil.rmtree(os.path.join(pdir, 'test-package'))
     shutil.rmtree(os.path.join(pdir, 'other-package'))
 
 
 @pytest.fixture
-def releases(db, packages, tmpdir):
+def releases(db, request, tmpdir):
+    package_test = Package(name="test-package")
+    package_other = Package(name="other-package")
+
+    package_test.maintainers.append(admin_user)
+    package_other.maintainers.append(admin_user)
+
+    db.session.add_all([package_test, package_other])
+
     for p in packages:
         r = Release(
             description="test",
@@ -152,10 +183,30 @@ def releases(db, packages, tmpdir):
 
     db.session.commit()
 
+    def fin():
+        db.session.delete(package_test)
+        db.session.delete(package_other)
+        db.session.commit()
+    request.addfinalizer(fin)
+
 
 @pytest.fixture
-def releases_dirs(app, db, packages_dirs, tmpdir):
+def releases_dirs(app, request, db, packages_dirs, tmpdir):
     pdir = app.config['STORAGE_PARAMS']['packages_root']
+    package_test = Package(name="test-package")
+    os.mkdir(os.path.join(pdir, 'test-package'))
+
+    package_other = Package(name="other-package")
+    os.mkdir(os.path.join(pdir, 'other-package'))
+
+    package_test.maintainers.append(admin_user)
+    package_other.maintainers.append(admin_user)
+
+    db.session.add_all([package_test, package_other])
+    db.session.commit()
+
+    packages = [package_test, package_other]
+
     for p in packages_dirs:
         r = Release(
             description="test",
@@ -171,6 +222,15 @@ def releases_dirs(app, db, packages_dirs, tmpdir):
         db.session.add(r)
 
     db.session.commit()
+
+    def fin():
+        for p in packages:
+            db.session.delete(p)
+        db.session.commit()
+
+        shutil.rmtree(os.path.join(pdir, 'test-package'))
+        shutil.rmtree(os.path.join(pdir, 'other-package'))
+    request.addfinalizer(fin)
 
 
 @pytest.fixture

@@ -15,7 +15,7 @@ def test_simple(client, db, packages, admin_headers):
     assert b'other-package' in res.data
 
 
-def test_simple_package(client, packages_dirs, releases_dirs, admin_headers):
+def test_simple_package(client, releases_dirs, admin_headers):
     """Test simple index for specific package"""
     res = client.get('/simple/test-package/', headers=admin_headers)
     assert b'test-package-0.1' in res.data
@@ -25,8 +25,7 @@ def test_simple_package(client, packages_dirs, releases_dirs, admin_headers):
     assert resp.status_code == 404
 
 
-def test_simple_package_download(client, packages_dirs,
-                                 releases_dirs, admin_headers):
+def test_simple_package_download(client, releases_dirs, admin_headers):
     """Test download of a package version"""
     res = client.get(
         '/simple/test-package/test-package-0.1.tar.gz',
