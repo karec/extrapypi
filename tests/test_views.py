@@ -150,6 +150,7 @@ def test_create_users(client, admin_headers):
     data = {
         'username': 'newuser',
         'email': 'newuser@mail.com',
+        'role': 'developer',
         'password': 'test',
         'confirm': 'test',
         'active': 'y'
@@ -161,6 +162,7 @@ def test_create_users(client, admin_headers):
     resp = client.get('/dashboard/users/')
     assert 'newuser' in resp.get_data(as_text=True)
     assert 'email' in resp.get_data(as_text=True)
+    assert 'developer' in resp.get_data(as_text=True)
 
 
 def test_view_user(client, user, admin_headers):
@@ -177,6 +179,7 @@ def test_update_user(client, user, admin_headers):
     data = {
         'username': 'updated',
         'email': user.email,
+        'role': 'maintainer',
         'active': 'y'
     }
     resp = client.post('/dashboard/users/%d' % user.id, headers=admin_headers,
@@ -186,6 +189,7 @@ def test_update_user(client, user, admin_headers):
     user = User.query.filter_by(id=user.id).first()
     assert user.username == 'updated'
     assert user.email == data['email']
+    assert user.role == data['role']
 
 
 def test_delete_user(client, user, admin_headers):

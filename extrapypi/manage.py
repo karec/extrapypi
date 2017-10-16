@@ -33,7 +33,8 @@ def init(user, password):
     user = models.User(
         username=user,
         email="email@admin.com",
-        password_hash=pwd
+        password_hash=pwd,
+        role='admin'
     )
     db.session.add(user)
     db.session.commit()

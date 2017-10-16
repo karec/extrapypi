@@ -39,7 +39,8 @@ def admin_user(db):
         user = User(
             username="admin",
             email="email@admin.com",
-            password_hash=custom_app_context.hash('admin')
+            password_hash=custom_app_context.hash('admin'),
+            role='admin'
         )
         db.session.add(user)
         db.session.commit()

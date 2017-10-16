@@ -91,11 +91,14 @@ def create_user():
     """Create a new user
     """
     form = UserCreateForm(request.form)
+    form.role.choices = [(r, r) for r in User.ROLES]
+
     if form.validate_on_submit():
         u = User(
             username=form.username.data,
             email=form.email.data,
-            is_active=form.is_active.data
+            is_active=form.is_active.data,
+            role=form.role.data
         )
         u.password_hash = custom_app_context.hash(form.password.data)
 
@@ -111,11 +114,14 @@ def create_user():
 def user_detail(user_id):
     user = User.query.get_or_404(user_id)
     form = UserForm(request.form, obj=user)
+    form.role.choices = [(r, r) for r in User.ROLES]
+
     if form.validate_on_submit():
         flash("User updated")
         form.populate_obj(user)
         db.session.commit()
         return redirect(url_for('dashboard.users_list'))
+
     return render_template("dashboard/user_detail.html", form=form, user=user)
 
 
