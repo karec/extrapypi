@@ -26,7 +26,7 @@ import logging.config
 from flask import Flask
 
 from extrapypi.commons import login
-from extrapypi import simple, utils, dashboard
+from extrapypi import simple, utils, dashboard, user
 from extrapypi.extensions import db, login_manager, csrf
 
 
@@ -89,6 +89,7 @@ def register_blueprints(app):
 
     app.register_blueprint(utils.views.blueprint)
     app.register_blueprint(dashboard.views.blueprint)
+    app.register_blueprint(user.views.blueprint)
 
 
 def configure_logging(app):
