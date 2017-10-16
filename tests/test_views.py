@@ -1,4 +1,5 @@
 from extrapypi.models import User
+from extrapypi.extensions import db
 
 
 def test_ping(client):
@@ -90,11 +91,11 @@ def test_delete_package(client):
     """Test delete of package"""
 
 
-def test_package_upload(client, tmpdir, admin_headers):
+def test_package_upload(client, tmpdir, admin_headers, monkeypatch):
     """Test upload of a package"""
     f = tmpdir.join("test")
     f.write("a simple test")
-    data = {
+    valid_data = {
         ':action': 'file_upload',
         'name': 'uploaded',
         'summary': 'from unittests',
@@ -106,7 +107,7 @@ def test_package_upload(client, tmpdir, admin_headers):
         'md5_digest': 'badhash',
         'file': (f.open('rb'), 'test-0.1.tar.gz')
     }
-    resp = client.post('/simple/', headers=admin_headers, data=data)
+    resp = client.post('/simple/', headers=admin_headers, data=valid_data)
     assert resp.status_code == 200
 
     # bad action
@@ -120,6 +121,13 @@ def test_package_upload(client, tmpdir, admin_headers):
     }
     resp = client.post('/simple/', headers=admin_headers, data=data)
     assert resp.status_code == 400
+
+    # monkey patch db to raise exception
+    def raise_db(obj):
+        raise Exception()
+    monkeypatch.setattr(db.session, 'commit', raise_db)
+    valid_data['file'] = (f.open('rb'), 'test-0.1.tar.gz')
+    resp = client.post('/simple/', headers=admin_headers, data=valid_data)
 
 
 def test_list_users(client, users, admin_headers):

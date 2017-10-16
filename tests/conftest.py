@@ -170,3 +170,15 @@ def releases_dirs(app, db, packages_dirs, tmpdir):
         db.session.add(r)
 
     db.session.commit()
+
+
+@pytest.fixture
+def badstore():
+
+    class BadStore:
+        NAME = 'badstore'
+
+        def create_package(self, b):
+            return False
+
+    return BadStore()
