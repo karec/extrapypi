@@ -13,11 +13,11 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href="{{url_for('dashboard.index')}}">Dashboard <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="{{url_for('dashboard.users_list')}}">Users</a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" method="POST" action="{{url_for('dashboard.search')}}">
@@ -26,6 +26,19 @@
         </form>
       </div>
     </nav>
+    <div class="container">
+      <div class="row">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+      </div>
+    </div>
     <div class="container">
       {% block body %}{% endblock %}
     </div>

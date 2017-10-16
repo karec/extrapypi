@@ -15,7 +15,7 @@
     {% for user in users %}
     <tr>
       <td>{{user.id}}</td>
-      <td><a href="#">{{user.username}}</a></td>
+      <td><a href="{{url_for('dashboard.user_detail', user_id=user.id)}}">{{user.username}}</a></td>
       <td>{{user.email}}</td>
       <td>
         {% if user.is_active %}

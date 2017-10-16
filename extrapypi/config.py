@@ -57,6 +57,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 # Flask settings
+DEBUG = True
 STATIC_URL = '/static/'
 SECRET_KEY = 'changeit'
 
@@ -66,6 +67,9 @@ STORAGE = 'LocalStorage'
 STORAGE_PARAMS = {
     'packages_root': "{}/packages".format(BASE_DIR)
 }
+
+WTF_CSRF_ENABLED = True
+WTF_CSRF_FIELD_NAME = 'csrf_token'
 
 
 # Logging

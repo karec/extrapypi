@@ -12,9 +12,7 @@
     {{ field.label }}
   </label>
 </div>
-{% else %}
-
-{% if field.type != 'HiddenField' and field.type != 'CSRFTokenField' %}
+{% elif field.type != 'HiddenField' and field.type != 'CSRFTokenField' %}
 {% set fclasses = 'form-control is-invalid' if field.errors else 'form-control' %}
 <div class="form-group">
   <label for="{{ field.id }}" class="control-label">{{ field.label }}</label>
@@ -26,10 +24,6 @@
     {% endfor%}
   {% endif %}
 </div>
-{% else %}
-{{ field() }}
-{% endif %}
-
 {% endif %}
 
 {% endfor %}

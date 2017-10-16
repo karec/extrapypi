@@ -3,7 +3,7 @@
 import logging
 from sqlalchemy.orm.exc import NoResultFound
 from flask import Blueprint, render_template, abort, request,\
-    current_app as app, flash
+    current_app as app, flash, redirect, url_for
 
 from extrapypi.forms.user import UserForm
 from extrapypi.commons.packages import get_store
@@ -87,8 +87,7 @@ def users_list():
 def user_detail(user_id):
     user = User.query.get_or_404(user_id)
     form = UserForm(request.form, obj=user)
-    if request.method == 'POST' and form.validate():
-        print(dir(form))
+    if form.validate_on_submit():
         flash("User updated")
-        return "ok"
+        return redirect(url_for('dashboard.users_list'))
     return render_template("dashboard/user_detail.html", form=form, user=user)
