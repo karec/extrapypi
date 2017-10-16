@@ -85,6 +85,8 @@ def configure_app(app, testing, config):
 def register_blueprints(app):
     """Register all views for application"""
     app.register_blueprint(simple.views.blueprint)
+    csrf.exempt(simple.views.blueprint)
+
     app.register_blueprint(utils.views.blueprint)
     app.register_blueprint(dashboard.views.blueprint)
 

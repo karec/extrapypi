@@ -21,10 +21,12 @@
         {% if user.is_active %}
         <span class="badge badge-success">active</span>
         {% else %}
-        <span class="badge badge-error">inactive</span>
+        <span class="badge badge-danger">inactive</span>
         {% endif %}
       </td>
-      <td></td>
+      <td>
+        <a href="" class="btn btn-danger btn-sm" onclick="return confirm('are you sure you want to delete this user ?')">delete</a>
+      </td>
     </tr>
     {% endfor %}
   </tbody>

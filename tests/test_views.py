@@ -1,3 +1,6 @@
+from extrapypi.models import User
+
+
 def test_ping(client):
     """Test simple ping endpoint"""
     res = client.get('/ping')
@@ -104,7 +107,6 @@ def test_package_upload(client, tmpdir, admin_headers):
         'file': (f.open('rb'), 'test-0.1.tar.gz')
     }
     resp = client.post('/simple/', headers=admin_headers, data=data)
-    print(resp.data)
     assert resp.status_code == 200
 
     # bad action
@@ -120,17 +122,49 @@ def test_package_upload(client, tmpdir, admin_headers):
     assert resp.status_code == 400
 
 
-def test_list_users(client):
+def test_list_users(client, users, admin_headers):
     """Test list users view"""
+    resp = client.get('/dashboard/users/')
+    assert resp.status_code == 200
+    data = resp.get_data(as_text=True)
+
+    for u in users:
+        assert u.username in data
+        assert u.email in data
 
 
 def test_create_users(client):
     """Test creation of a new user"""
 
 
-def test_update_user(client):
+def test_view_user(client, user, admin_headers):
+    """Test simple get of a user"""
+    resp = client.get('/dashboard/users/%d' % user.id, headers=admin_headers)
+    assert resp.status_code == 200
+
+    assert user.username in resp.get_data(as_text=True)
+    assert user.email in resp.get_data(as_text=True)
+
+
+def test_update_user(client, user, admin_headers):
     """Test update of a user"""
+    data = {
+        'username': 'updated',
+        'email': user.email,
+        'active': 'y'
+    }
+    resp = client.post('/dashboard/users/%d' % user.id, headers=admin_headers, data=data)
+    assert resp.status_code == 302
+
+    user = User.query.filter_by(id=user.id).first()
+    assert user.username == 'updated'
+    assert user.email == data['email']
 
 
-def test_delete_user(client):
+def test_delete_user(client, user, admin_headers):
     """Test deletion of a user"""
+    user_id = user.id
+    resp = client.get('/dashboard/users/delete/%d' % user_id, headers=admin_headers)
+    assert resp.status_code == 302
+
+    assert User.query.filter_by(id=user_id).first() is None

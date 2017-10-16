@@ -57,6 +57,35 @@ def admin_headers(admin_user):
 
 
 @pytest.fixture
+def users(db):
+    users = []
+    for i in range(0, 10):
+        u = User(
+            username="user_%d" % i,
+            email="user_%d@mail.com" % i,
+            password_hash=custom_app_context.hash('admin')
+        )
+        users.append(u)
+
+    db.session.add_all(users)
+    db.session.commit()
+
+    return users
+
+
+@pytest.fixture
+def user(db):
+    u = User(
+        username="test-user",
+        email="user_test@mail.com",
+        password_hash=custom_app_context.hash('admin')
+    )
+    db.session.add(u)
+    db.session.commit()
+    return u
+
+
+@pytest.fixture
 def werkzeug_file(tmpdir):
     release = tmpdir.mkdir('uploads').join('testupload-0.1.tar.gz')
     release.write("test-upload")

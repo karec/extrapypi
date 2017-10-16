@@ -5,6 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask import Blueprint, render_template, abort, request,\
     current_app as app, flash, redirect, url_for
 
+from extrapypi.extensions import csrf, db
 from extrapypi.forms.user import UserForm
 from extrapypi.commons.packages import get_store
 from extrapypi.models import Package, Release, User
@@ -25,6 +26,7 @@ def index():
 
 
 @blueprint.route('/search/', methods=['POST'])
+@csrf.exempt
 def search():
     """Search page
     """
@@ -89,5 +91,17 @@ def user_detail(user_id):
     form = UserForm(request.form, obj=user)
     if form.validate_on_submit():
         flash("User updated")
+        form.populate_obj(user)
+        db.session.commit()
         return redirect(url_for('dashboard.users_list'))
+    print(form.errors)
     return render_template("dashboard/user_detail.html", form=form, user=user)
+
+
+@blueprint.route('/users/delete/<int:user_id>', methods=['GET'])
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash("User deleted")
+    return redirect(url_for('dashboard.users_list'))

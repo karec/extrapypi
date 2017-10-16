@@ -23,4 +23,4 @@ class User(db.Model):
             return str(self.id)
 
     def __repr__(self):
-        return "<User {username}>".format(self)
+        return "<User {0.username}>".format(self)
