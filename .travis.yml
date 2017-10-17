@@ -9,8 +9,8 @@ services:
   - mysql
 
 before_script:
-  - psql -C "create user testing with password 'testing';" -U postgres
-  - psql -C "create database testing owner testing;" -U postgres
+  - psql -c "create user testing with password 'testing';" -U postgres
+  - psql -c "create database testing owner testing;" -U postgres
   - mysql -e "create user 'testing'@'localhost' identified by 'testing';"
   - mysql -e "grant all privileges on testing.* to 'testing'@'localhost';"
 
