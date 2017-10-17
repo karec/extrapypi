@@ -12,6 +12,7 @@ before_script:
   - psql -c "create user testing with password 'testing';" -U postgres
   - psql -c "create database testing owner testing;" -U postgres
   - mysql -e "create user 'testing'@'localhost' identified by 'testing';"
+  - mysql -e "create database testing;"
   - mysql -e "grant all privileges on testing.* to 'testing'@'localhost';"
 
 install:
