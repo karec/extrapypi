@@ -91,10 +91,13 @@ def user(db):
     )
     db.session.add(u)
     db.session.commit()
+
     yield u
 
-    db.session.delete(u)
-    db.session.commit()
+    u = User.query.filter_by(email="user_test@mail.com").first()
+    if u is not None:
+        db.session.delete(u)
+        db.session.commit()
 
 
 @pytest.fixture
@@ -124,7 +127,6 @@ def packages(db, request, admin_user, app):
 
     def fin():
         for p in packages:
-            print(p)
             db.session.delete(p)
         db.session.commit()
 
@@ -160,15 +162,17 @@ def packages_dirs(db, admin_user, app):
 
 
 @pytest.fixture
-def releases(db, request, tmpdir):
+def releases(db, request, admin_user, tmpdir):
     package_test = Package(name="test-package")
     package_other = Package(name="other-package")
 
     package_test.maintainers.append(admin_user)
     package_other.maintainers.append(admin_user)
 
-    db.session.add_all([package_test, package_other])
+    packages = [package_test, package_other]
+    db.session.add_all(packages)
 
+    releases = []
     for p in packages:
         r = Release(
             description="test",
@@ -179,8 +183,9 @@ def releases(db, request, tmpdir):
             md5_digest="badmd5"
         )
         r.package = p
-        db.session.add(r)
+        releases.append(r)
 
+    db.session.add_all(releases)
     db.session.commit()
 
     def fin():
@@ -188,10 +193,11 @@ def releases(db, request, tmpdir):
         db.session.delete(package_other)
         db.session.commit()
     request.addfinalizer(fin)
+    return releases
 
 
 @pytest.fixture
-def releases_dirs(app, request, db, tmpdir):
+def releases_dirs(app, request, db, admin_user):
     pdir = app.config['STORAGE_PARAMS']['packages_root']
     package_test = Package(name="test-package")
     os.mkdir(os.path.join(pdir, 'test-package'))
@@ -207,7 +213,7 @@ def releases_dirs(app, request, db, tmpdir):
 
     packages = [package_test, package_other]
 
-    for p in packages_dirs:
+    for p in packages:
         r = Release(
             description="test",
             download_url="http://test",

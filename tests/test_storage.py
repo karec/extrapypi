@@ -26,7 +26,7 @@ def test_base_storage():
         bs.create_release(None, None)
 
 
-def test_local_storage(app, db, tmpdir, packages, releases, werkzeug_file):
+def test_local_storage(app, db, tmpdir, releases, werkzeug_file):
     """Test local storage"""
     with pytest.raises(RuntimeError):
         ls = LocalStorage()

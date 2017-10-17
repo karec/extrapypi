@@ -58,7 +58,7 @@ def test_search_packages(client, packages, admin_headers):
     assert b'test-package' not in res.data
 
 
-def test_package_details(client, packages, releases):
+def test_package_details(client, releases):
     """Test view for package details"""
     res = client.get('/dashboard/test-package/')
     assert res.status_code == 200
@@ -72,14 +72,15 @@ def test_package_details(client, packages, releases):
     assert res.status_code == 404
 
 
-def test_release_details(client, packages, releases):
+def test_release_details(client, releases):
     """Test view for release details"""
-    res = client.get('/dashboard/test-package/1/')
-    assert res.status_code == 200
-    assert b'test' in res.data
-    assert b'0.1' in res.data
-    assert b'test,other' in res.data
-    assert b'badmd5' in res.data
+    for r in releases:
+        res = client.get('/dashboard/%s/%d' % (r.package.name, r.id))
+        assert res.status_code == 200
+        assert b'test' in res.data
+        assert b'0.1' in res.data
+        assert b'test,other' in res.data
+        assert b'badmd5' in res.data
 
     # bad release
     res = client.get('/dashboard/test-package/99/')

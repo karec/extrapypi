@@ -11,9 +11,20 @@ class Release(db.Model):
     keywords = db.Column(db.String(255, convert_unicode=True))
     md5_digest = db.Column(db.String(32), nullable=False)
 
-    package_id = db.Column(db.Integer, db.ForeignKey('package.id', name='_fk_release_package'), nullable=False)
+    package_id = db.Column(
+        db.Integer,
+        db.ForeignKey('package.id', name='_fk_release_package'), nullable=False
+    )
 
-    package = db.relationship('Package', backref=db.backref('releases', lazy='dynamic'), lazy='joined')
+    package = db.relationship(
+        'Package',
+        backref=db.backref(
+            'releases',
+            lazy='dynamic',
+            cascade='all, delete-orphan'
+        ),
+        lazy='joined',
+    )
 
     def __repr__(self):
         return "<Release {0.version} for package {0.package.name}>".format(self)

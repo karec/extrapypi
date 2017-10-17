@@ -56,7 +56,7 @@ def package(package):
                            releases=releases)
 
 
-@blueprint.route('/<string:package>/<int:release_id>/', methods=['GET'])
+@blueprint.route('/<string:package>/<int:release_id>', methods=['GET'])
 def release(package, release_id):
     """Specific release view
     """

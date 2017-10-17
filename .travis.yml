@@ -3,6 +3,17 @@ python:
   - '2.7'
   - '3.4'
   - '3.5'
+
+services:
+  - postgresql
+  - mysql
+
+before_script:
+  - psql -C "create user testing with password 'testing';" -U postgres
+  - psql -C "create database testing owner testing;" -U postgres
+  - mysql -e "create user 'testing'@'localhost' identified by 'testing';"
+  - mysql -e "grant all privileges on testing.* to 'testing'@'localhost';"
+
 install:
   - pip install tox
   - pip install coveralls
