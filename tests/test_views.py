@@ -83,7 +83,7 @@ def test_release_details(client, releases):
         assert b'badmd5' in res.data
 
     # bad release
-    res = client.get('/dashboard/test-package/99/')
+    res = client.get('/dashboard/test-package/99')
     assert res.status_code == 404
 
 
