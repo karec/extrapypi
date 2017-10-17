@@ -52,7 +52,11 @@ def test_list_packages(client, packages, admin_headers):
 
 def test_search_packages(client, packages, admin_headers):
     """Test search packages"""
-    res = client.post('/dashboard/search/', data={"search": "other"})
+    res = client.post(
+        '/dashboard/search/',
+        data={"search": "other"},
+        headers=admin_headers
+    )
     assert res.status_code == 200
     assert b'other-package' in res.data
     assert b'test-package' not in res.data

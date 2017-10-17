@@ -21,3 +21,9 @@ class UserCreateForm(FlaskForm):
     ])
     confirm = PasswordField('Repeat password')
     is_active = BooleanField('active')
+
+
+class LoginForm(FlaskForm):
+    username = StringField('username', validators=[DataRequired()])
+    password = PasswordField('password', validators=[DataRequired()])
+    remember = BooleanField('Remember me')

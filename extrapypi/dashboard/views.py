@@ -3,13 +3,14 @@
 import logging
 from passlib.apps import custom_app_context
 from sqlalchemy.orm.exc import NoResultFound
+from flask_login import login_required, login_user
 from flask import Blueprint, render_template, abort, request,\
     current_app as app, flash, redirect, url_for
 
 from extrapypi.extensions import csrf, db
 from extrapypi.commons.packages import get_store
 from extrapypi.models import Package, Release, User
-from extrapypi.forms.user import UserForm, UserCreateForm
+from extrapypi.forms.user import UserForm, UserCreateForm, LoginForm
 
 
 log = logging.getLogger("extrapypi")
@@ -19,6 +20,7 @@ blueprint = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
 
 @blueprint.route('/', methods=['GET'])
+@login_required
 def index():
     """Dashboard index, listing packages
     """
@@ -26,7 +28,28 @@ def index():
     return render_template("dashboard/index.html", packages=packages)
 
 
+@blueprint.route('/login', methods=['GET', 'POST'])
+def login():
+    """Login view
+    """
+    form = LoginForm(request.form)
+
+    if form.validate_on_submit():
+        username = form.username.data
+        pwd = form.password.data
+
+        user = User.query.filter_by(username=username).first()
+        if not user or not custom_app_context.verify(pwd, user.password_hash):
+            flash("Bad user / password", 'alert-danger')
+            return render_template("login.html", form=form)
+        login_user(user, remember=form.remember.data)
+        return redirect(url_for('dashboard.index'))
+
+    return render_template("login.html", form=form)
+
+
 @blueprint.route('/search/', methods=['POST'])
+@login_required
 @csrf.exempt
 def search():
     """Search page
