@@ -27,3 +27,12 @@ class LoginForm(FlaskForm):
     username = StringField('username', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
     remember = BooleanField('Remember me')
+
+
+class PasswordForm(FlaskForm):
+    current = PasswordField('Current password', validators=[DataRequired()])
+    password = PasswordField('New password', validators=[
+        DataRequired(),
+        EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Repeat password')

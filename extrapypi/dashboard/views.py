@@ -3,7 +3,7 @@
 import logging
 from passlib.apps import custom_app_context
 from sqlalchemy.orm.exc import NoResultFound
-from flask_login import login_required, login_user
+from flask_login import login_required, login_user, logout_user
 from flask import Blueprint, render_template, abort, request,\
     current_app as app, flash, redirect, url_for
 
@@ -31,6 +31,8 @@ def index():
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     """Login view
+
+    Will redirect to dashboard index if login is successful
     """
     form = LoginForm(request.form)
 
@@ -46,6 +48,16 @@ def login():
         return redirect(url_for('dashboard.index'))
 
     return render_template("login.html", form=form)
+
+
+@blueprint.route('/logout', methods=['GET'])
+def logout():
+    """Logout view
+
+    Will redirect to login view
+    """
+    logout_user()
+    return redirect(url_for('dashboard.login'))
 
 
 @blueprint.route('/search/', methods=['POST'])

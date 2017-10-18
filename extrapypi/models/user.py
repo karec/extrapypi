@@ -31,6 +31,10 @@ class User(db.Model):
     def is_anonymous(self):
         return False
 
+    @property
+    def is_admin(self):
+        return self.role == 'admin'
+
     def get_id(self):
         try:
             return unicode(self.id)

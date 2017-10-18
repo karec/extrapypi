@@ -20,27 +20,40 @@
             <a class="nav-link" href="{{url_for('dashboard.users_list')}}">Users</a>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" method="POST" action="{{url_for('dashboard.search')}}">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              User
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="{{url_for('user.update_user')}}">Update my info</a>
+              <a class="dropdown-item" href="{{url_for('user.update_password')}}">Update password</a>
+              <a class="dropdown-item" href="#">Logout</a>
+            </div>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0 ml-3" method="POST" action="{{url_for('dashboard.search')}}">
           <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search", name="search">
           <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
         </form>
       </div>
     </nav>
     <div class="container">
-      <div class="row">
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul class=flashes>
-          {% for message in messages %}
-          <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, message in messages %}
+          <div class="alert {{cat}}" role="alert">
+            {{message}}
+          </div>
+        {% endfor %}
+      {% endwith %}
     </div>
     <div class="container">
       {% block body %}{% endblock %}
     </div>
+
+    <script src="{{url_for('static', filename='js/jquery-3.2.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/popper.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+
   </body>
 </html>

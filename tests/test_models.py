@@ -10,12 +10,14 @@ def test_user():
     u = models.User(
         username='myuser',
         email='mymail@mail.com',
-        password_hash='badhash'
+        password_hash='badhash',
+        role='maintainer'
     )
     assert u.is_authenticated is True
     assert u.is_anonymous is False
     assert u.get_id() == 'None'
     assert str(u) == "<User myuser>"
+    assert u.is_admin is False
 
     with pytest.raises(Exception):
         u.role = 'badrole'

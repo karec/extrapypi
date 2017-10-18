@@ -203,3 +203,81 @@ def test_delete_user(client, user, admin_headers):
     assert resp.status_code == 302
 
     assert User.query.filter_by(id=user_id).first() is None
+
+
+def test_update_self(client, admin_user, admin_headers):
+    """Test view for updating self informations"""
+    # check if form view work
+    resp = client.get("/user/", headers=admin_headers)
+
+    assert resp.status_code == 200
+    assert admin_user.username in resp.get_data(as_text=True)
+    assert admin_user.email in resp.get_data(as_text=True)
+
+    # check if update is ok
+    data = {
+        'username': admin_user.username,
+        'email': 'newmail@mail.com'
+    }
+    resp = client.post("/user/", data=data, headers=admin_headers)
+    assert resp.status_code == 302
+
+    u = User.query.filter_by(username=admin_user.username).one()
+    assert u.email == data['email']
+
+
+def test_login_view(client, user):
+    """Test view for login"""
+
+    # check if get return form and 200 status
+    resp = client.get('/dashboard/login')
+    assert resp.status_code == 200
+
+    # check if flash message is here if we send bad data
+    data = {
+        'username': 'badlogin',
+        'password': 'badpassword'
+    }
+    resp = client.post('/dashboard/login', data=data)
+    assert resp.status_code == 200
+    assert b'Bad user / password' in resp.data
+
+    # check if we can actually log in
+    data = {
+        'username': user.username,
+        'password': 'admin'
+    }
+    resp = client.post('/dashboard/login', data=data)
+    assert resp.status_code == 302
+
+
+def test_logout(client, admin_headers):
+    """Test logout view"""
+    resp = client.get('/dashboard/logout')
+    assert resp.status_code == 302
+
+
+def test_update_pwd(client, admin_user, admin_headers):
+    """Test update password view"""
+    # check basic get
+    resp = client.get('/user/password', headers=admin_headers)
+    assert resp.status_code == 200
+
+    # check invalid current password
+    data = {
+        'current': 'bad',
+        'password': 'new',
+        'confirm': 'new'
+    }
+    resp = client.post('/user/password', headers=admin_headers, data=data)
+    assert resp.status_code == 200
+    assert b'Bad password provided' in resp.data
+
+    # check good update
+    data = {
+        'current': 'admin',
+        'password': 'admin',
+        'confirm': 'admin'
+    }
+    resp = client.post('/user/password', headers=admin_headers, data=data)
+    assert resp.status_code == 302
