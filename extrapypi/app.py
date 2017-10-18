@@ -27,7 +27,7 @@ from flask import Flask
 
 from extrapypi.commons import login
 from extrapypi import simple, utils, dashboard, user
-from extrapypi.extensions import db, login_manager, csrf
+from extrapypi.extensions import db, login_manager, csrf, principal
 
 
 def create_app(testing=False, config=None):
@@ -66,6 +66,8 @@ def configure_extensions(app):
     login_manager.init_app(app)
     login_manager.user_loader(login.user_loader)
     login_manager.request_loader(login.load_user_from_request)
+
+    principal.init_app(app)
 
 
 def configure_app(app, testing, config):

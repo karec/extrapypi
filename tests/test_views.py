@@ -8,11 +8,15 @@ def test_ping(client):
     assert b'pong' in res.data
 
 
-def test_simple(client, db, packages, admin_headers):
+def test_simple(client, db, packages, admin_headers, bad_headers):
     """Test simple view index"""
     res = client.get('/simple/', headers=admin_headers)
     assert b'test-package' in res.data
     assert b'other-package' in res.data
+
+    # test with bad headers
+    res = client.get('/simple/', headers=bad_headers)
+    assert res.status_code == 401
 
 
 def test_simple_package(client, releases_dirs, admin_headers):

@@ -3,6 +3,7 @@
 import logging
 from passlib.apps import custom_app_context
 from sqlalchemy.orm.exc import NoResultFound
+from flask_principal import identity_changed, Identity
 from flask_login import login_required, login_user, logout_user
 from flask import Blueprint, render_template, abort, request,\
     current_app as app, flash, redirect, url_for
@@ -44,7 +45,13 @@ def login():
         if not user or not custom_app_context.verify(pwd, user.password_hash):
             flash("Bad user / password", 'alert-danger')
             return render_template("login.html", form=form)
+
         login_user(user, remember=form.remember.data)
+        identity_changed.send(
+            app._get_current_object(),
+            identity=Identity(user.id)
+        )
+
         return redirect(url_for('dashboard.index'))
 
     return render_template("login.html", form=form)

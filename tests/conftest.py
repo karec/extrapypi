@@ -61,6 +61,15 @@ def admin_headers(admin_user):
 
 
 @pytest.fixture
+def bad_headers(admin_user):
+    credentials = "{}:{}".format(admin_user.username, 'bad').encode('ascii')
+    encoded = b64encode(credentials)
+    return {
+        'Authorization': b'Basic ' + encoded,
+    }
+
+
+@pytest.fixture
 def users(db):
     users = []
     for i in range(0, 10):
@@ -87,7 +96,8 @@ def user(db):
     u = User(
         username="test-user",
         email="user_test@mail.com",
-        password_hash=custom_app_context.hash('admin')
+        password_hash=custom_app_context.hash('admin'),
+        role='maintainer'
     )
     db.session.add(u)
     db.session.commit()
