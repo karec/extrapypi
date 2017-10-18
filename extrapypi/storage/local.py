@@ -60,7 +60,7 @@ class LocalStorage(BaseStorage):
 
         files = os.listdir(path)
         if release is not None:
-            regex = '{}-(?P<version>[0-9\.]*)\..*'.format(package.name)
+            regex = '{}-(?P<version>[0-9\.]*)[\.-].*'.format(package.name)
             r = re.compile(regex)
             v = release.version
             files = filter(

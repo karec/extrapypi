@@ -60,7 +60,7 @@ def create_package(name, summary, store):
             "Cannot create storage for package {0.name} using {1.NAME}"
             .format(p, store)
         )
-        return None
+        raise RuntimeError("Storage missconfigured")
 
     db.session.add(p)
     db.session.commit()

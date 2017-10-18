@@ -17,7 +17,8 @@ def test_create_package_errors(app, client, badstore, monkeypatch):
     def pass_permission(obj):
         return True
     monkeypatch.setattr(Permission, 'test', pass_permission)
-    assert create_package("test", "test", badstore) is None
+    with pytest.raises(RuntimeError):
+        create_package("test", "test", badstore)
 
 
 def test_user_loader(admin_user):
