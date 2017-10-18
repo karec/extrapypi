@@ -33,10 +33,16 @@
     keywords : {{release.keywords}}
     <br/>
     md5 digest : {{release.md5_digest}}
+    <br/>
+    created on : {{release.created_at.strftime("%Y-%m-%d")}}
+    {% if release.updated_at %}
+    <br/>
+    last update : {{release.updated_at.strftime("%Y-%m-%d")}}
+    {% endif %}
   </div>
 </div>
 <div class="row">
-  <div class="col">
+  <div class="col mt-3">
     <h3>Other releases</h3>
     {% for r in releases %}
     <a href="{{url_for('dashboard.release', package=release.package.name, release_id=r.id)}}">{{r.version}}</a>

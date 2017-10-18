@@ -38,7 +38,7 @@
         </form>
       </div>
     </nav>
-    <div class="container">
+    <div class="container mt-2">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% for cat, message in messages %}
           <div class="alert {{cat}}" role="alert">

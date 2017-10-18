@@ -1,3 +1,5 @@
+import datetime
+
 from extrapypi.extensions import db
 from extrapypi.models.types import UnicodeText
 
@@ -10,6 +12,8 @@ class Release(db.Model):
     version = db.Column(db.String(80, convert_unicode=True))
     keywords = db.Column(db.String(255, convert_unicode=True))
     md5_digest = db.Column(db.String(32), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.datetime.utcnow)
 
     package_id = db.Column(
         db.Integer,

@@ -4,3 +4,4 @@ source =
 omit =
      *tests*
      extrapypi/manage.py
+     extrapypi/wsgi.py
