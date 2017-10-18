@@ -1,4 +1,6 @@
 import os
+
+import six
 import click
 from flask.cli import FlaskGroup
 from extrapypi.app import create_app
@@ -20,7 +22,9 @@ def cli():
 @cli.command("init")
 @click.option('--user', default='admin', help="first user to create")
 @click.option('--password', default='admin', help="user password")
-def init(user, password):
+@click.option('--pip-user', default='pip', help="installer username")
+@click.option('--pip-pwd', default='pip', help="installer password")
+def init(user, password, pip_user, pip_pwd):
     """Init database and create an admin user"""
     from extrapypi.extensions import db
     from extrapypi import models
@@ -36,9 +40,28 @@ def init(user, password):
         password_hash=pwd,
         role='admin'
     )
+
+    pip_pwd = custom_app_context.hash(pip_pwd)
+    pip_usr = models.User(
+        username=pip_user,
+        email="email@admin.com",
+        password_hash=pip_pwd,
+        role="installer"
+    )
+
+    db.session.add(pip_usr)
     db.session.add(user)
     db.session.commit()
-    click.echo("User created")
+    click.echo("User %s created" % user.username)
+    click.echo("User %s created" % pip_usr.username)
+
+
+@cli.command("start")
+@click.option('--filename', default='config.cfg', help="config file name")
+def init_config(filename):
+    """create sample config file"""
+    with open(filename, 'w') as f:
+        pass
 
 
 @cli.command("create-user")

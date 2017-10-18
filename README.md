@@ -5,6 +5,11 @@
 
 External pypi server with web ui and basics permissions management
 
+extrapypi don't mirror official pypi packages, and will not. It's just not build with 
+this goal in mind.
+extrapypi is just here to provide you an extra index to upload and install private packages
+simply.
+
 
 ## Features
 
@@ -18,12 +23,42 @@ External pypi server with web ui and basics permissions management
 * Basic dashboard to visualize packages and users
 * Codebase aim to be simple and hackable
 
-## Extrapypi goals
+## Roadmap
 
-extrapypi don't mirror official pypi packages, and will not. It's just not build with 
-this goal in mind.
-extrapypi is just here to provide you an extra index to upload and install private packages
-simply.
+Features that we want to implement for future releases :
+
+* interface for pip search
+* prefix management
+
+## Installation
+
+You can install extrapypi with pip
+
+```bash
+pip install extrapypi
+```
+
+For mysql 
+
+```bash
+pip install extrapypi[mysql]
+```
+
+For postgresql
+
+```bash
+pip install extrapypi[postgres]
+```
+
+Or from source 
+
+```bash
+python setup.py install
+```
+
+## Deployement
+
+
 
 
 ## Development
