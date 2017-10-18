@@ -12,6 +12,7 @@ from extrapypi import storage
 from extrapypi.extensions import db
 from extrapypi.models import Package, Release
 from extrapypi.storage.base import BaseStorage
+from extrapypi.commons.permissions import dev_permission, maintainer_permission
 
 log = logging.getLogger("extrapypi")
 
@@ -41,9 +42,14 @@ def create_package(name, summary, store):
     """Create a package for a given release
     if the package don't exists already
 
+    .. note::
+        Maintainer and installer cannot create packages
+
     :param dict data: request data to use to create package
     :param extrapypi.storage.BaseStorage storage: storage object to use
+    :raises: PermissionDenied
     """
+    dev_permission.test()
     p = Package(
         name=name,
         summary=summary
@@ -66,10 +72,17 @@ def create_release(data, config, files):
 
     Since pypi itself don't support pre-registration anymore, we don't
 
+    .. note::
+
+        Installers cannot create a new release
+
     If a release with same version number and package exists, we return it
     :param dict data: request data for registering package
     :param dict config: current app config
+    :raises: PermissionDenied
     """
+    maintainer_permission.test()
+
     store = get_store(config.get('STORAGE'), config.get('STORAGE_PARAMS'))
 
     try:

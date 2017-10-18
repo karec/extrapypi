@@ -3,6 +3,7 @@
 import logging
 from flask_login import login_required
 from sqlalchemy.orm.exc import NoResultFound
+from flask_principal import PermissionDenied
 from flask import (
     request,
     render_template,
@@ -13,6 +14,7 @@ from flask import (
 )
 
 from extrapypi.models import Package
+from extrapypi.commons.permissions import installer_permission
 from extrapypi.commons.packages import create_release, get_store
 
 log = logging.getLogger("extrapypi")
@@ -23,6 +25,7 @@ blueprint = Blueprint('simple', __name__, url_prefix='/simple')
 
 @blueprint.route('/', methods=['GET', 'POST'])
 @login_required
+@installer_permission.require()
 def simple():
     """Simple view index used to list or upload packages
 
@@ -38,6 +41,9 @@ def simple():
         try:
             create_release(request.form, current_app.config, request.files)
             return "OK", 200
+        except PermissionDenied:
+            log.error("Not enough permissions")
+            abort(401)
         except Exception:
             log.exception("Cannot upload release")
             abort(400)
@@ -48,6 +54,7 @@ def simple():
 
 @blueprint.route('/<string:package>/', methods=['GET'])
 @login_required
+@installer_permission.require()
 def package_view(package):
     store = get_store(
         current_app.config['STORAGE'],
@@ -65,6 +72,7 @@ def package_view(package):
 
 @blueprint.route('/<string:package>/<path:source>', methods=['GET'])
 @login_required
+@installer_permission.require()
 def download_package(package, source):
     store = get_store(
         current_app.config['STORAGE'],

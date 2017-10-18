@@ -111,6 +111,15 @@ def user(db):
 
 
 @pytest.fixture
+def maintainer_headers(user):
+    credentials = "{}:{}".format(user.username, 'admin').encode('ascii')
+    encoded = b64encode(credentials)
+    return {
+        'Authorization': b'Basic ' + encoded,
+    }
+
+
+@pytest.fixture
 def werkzeug_file(tmpdir):
     release = tmpdir.mkdir('uploads').join('testupload-0.1.tar.gz')
     release.write("test-upload")

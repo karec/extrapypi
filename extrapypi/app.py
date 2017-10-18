@@ -59,7 +59,10 @@ def create_app(testing=False, config=None):
 
 
 def configure_extensions(app):
-    """Init all extensions"""
+    """Init all extensions
+
+    For login manager, we also register callbacks here
+    """
     db.init_app(app)
     csrf.init_app(app)
 
@@ -71,7 +74,14 @@ def configure_extensions(app):
 
 
 def configure_app(app, testing, config):
-    """Set configuration for application"""
+    """Set configuration for application
+
+    Configuration will be loaded in the following order:
+
+    * test_config if testing is True
+    * else if config parameter is not None we load it
+    * else if env variable for config is set we use it
+    """
     app.config.from_object('extrapypi.config')
 
     env_config = os.environ.get('EXTRAPYPI_CONFIG', None)
@@ -81,7 +91,7 @@ def configure_app(app, testing, config):
     elif config is not None:
         app.config.from_pyfile(config)
     elif env_config is not None:
-        app.config.from_pyfile(config)
+        app.config.from_pyfile(env_config)
 
 
 def register_blueprints(app):

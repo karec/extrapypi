@@ -3,6 +3,7 @@
 import logging
 from passlib.apps import custom_app_context
 from flask_login import login_required, current_user
+from flask_principal import Permission, UserNeed, RoleNeed
 from flask import Blueprint, request, flash, render_template, url_for, redirect
 
 from extrapypi.extensions import db
@@ -24,6 +25,12 @@ def update_user():
     del form.role
     del form.is_active
 
+    perm = Permission(
+        UserNeed(user.id),
+        RoleNeed('admin')
+    )
+    perm.test()
+
     if form.validate_on_submit():
         form.populate_obj(user)
         db.session.commit()
@@ -40,6 +47,12 @@ def update_password():
     """
     user = current_user
     form = PasswordForm(request.form)
+
+    perm = Permission(
+        UserNeed(user.id),
+        RoleNeed('admin')
+    )
+    perm.test()
 
     if form.validate_on_submit():
         to_check = user.password_hash

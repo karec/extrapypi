@@ -11,6 +11,7 @@ from flask import Blueprint, render_template, abort, request,\
 from extrapypi.extensions import csrf, db
 from extrapypi.commons.packages import get_store
 from extrapypi.models import Package, Release, User
+from extrapypi.commons.permissions import admin_permission
 from extrapypi.forms.user import UserForm, UserCreateForm, LoginForm
 
 
@@ -58,6 +59,7 @@ def login():
 
 
 @blueprint.route('/logout', methods=['GET'])
+@login_required
 def logout():
     """Logout view
 
@@ -80,6 +82,7 @@ def search():
 
 
 @blueprint.route('/<string:package>/', methods=['GET'])
+@login_required
 def package(package):
     """Package detail view
     """
@@ -99,6 +102,7 @@ def package(package):
 
 
 @blueprint.route('/<string:package>/<int:release_id>', methods=['GET'])
+@login_required
 def release(package, release_id):
     """Specific release view
     """
@@ -121,6 +125,8 @@ def release(package, release_id):
 
 
 @blueprint.route('/users/', methods=['GET'])
+@login_required
+@admin_permission.require()
 def users_list():
     """List user in dashboard
     """
@@ -129,6 +135,8 @@ def users_list():
 
 
 @blueprint.route('/users/create', methods=['GET', 'POST'])
+@login_required
+@admin_permission.require()
 def create_user():
     """Create a new user
     """
@@ -153,6 +161,8 @@ def create_user():
 
 
 @blueprint.route('/users/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+@admin_permission.require()
 def user_detail(user_id):
     user = User.query.get_or_404(user_id)
     form = UserForm(request.form, obj=user)
@@ -168,6 +178,8 @@ def user_detail(user_id):
 
 
 @blueprint.route('/users/delete/<int:user_id>', methods=['GET'])
+@login_required
+@admin_permission.require()
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
     db.session.delete(user)

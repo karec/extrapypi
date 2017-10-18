@@ -66,9 +66,9 @@ def test_search_packages(client, packages, admin_headers):
     assert b'test-package' not in res.data
 
 
-def test_package_details(client, releases):
+def test_package_details(client, releases, admin_headers):
     """Test view for package details"""
-    res = client.get('/dashboard/test-package/')
+    res = client.get('/dashboard/test-package/', headers=admin_headers)
     assert res.status_code == 200
     assert b'test' in res.data
     assert b'0.1' in res.data
@@ -76,14 +76,17 @@ def test_package_details(client, releases):
     assert b'badmd5' in res.data
 
     # bad package
-    res = client.get('/dashboard/bad-package/')
+    res = client.get('/dashboard/bad-package/', headers=admin_headers)
     assert res.status_code == 404
 
 
-def test_release_details(client, releases):
+def test_release_details(client, releases, admin_headers):
     """Test view for release details"""
     for r in releases:
-        res = client.get('/dashboard/%s/%d' % (r.package.name, r.id))
+        res = client.get(
+            '/dashboard/%s/%d' % (r.package.name, r.id),
+            headers=admin_headers
+        )
         assert res.status_code == 200
         assert b'test' in res.data
         assert b'0.1' in res.data
@@ -91,12 +94,32 @@ def test_release_details(client, releases):
         assert b'badmd5' in res.data
 
     # bad release
-    res = client.get('/dashboard/test-package/99')
+    res = client.get('/dashboard/test-package/99', headers=admin_headers)
     assert res.status_code == 404
 
 
 def test_delete_package(client):
     """Test delete of package"""
+
+
+def test_package_upload_error(client, tmpdir, maintainer_headers):
+    """Test upload of a package without rights"""
+    f = tmpdir.join("test")
+    f.write("a simple test")
+    valid_data = {
+        ':action': 'file_upload',
+        'name': 'uploaded',
+        'summary': 'from unittests',
+        'description': 'simple upload test',
+        'download_url': '',
+        'home_page': '',
+        'version': '0.1',
+        'keywords': ['test', 'other'],
+        'md5_digest': 'badhash',
+        'file': (f.open('rb'), 'test-0.1.tar.gz')
+    }
+    resp = client.post('/simple/', headers=maintainer_headers, data=valid_data)
+    assert resp.status_code == 401
 
 
 def test_package_upload(client, tmpdir, admin_headers, monkeypatch):
@@ -140,7 +163,7 @@ def test_package_upload(client, tmpdir, admin_headers, monkeypatch):
 
 def test_list_users(client, users, admin_headers):
     """Test list users view"""
-    resp = client.get('/dashboard/users/')
+    resp = client.get('/dashboard/users/', headers=admin_headers)
     assert resp.status_code == 200
     data = resp.get_data(as_text=True)
 
@@ -167,7 +190,7 @@ def test_create_users(client, admin_headers):
                        headers=admin_headers, data=data)
     assert resp.status_code == 302
 
-    resp = client.get('/dashboard/users/')
+    resp = client.get('/dashboard/users/', headers=admin_headers)
     assert 'newuser' in resp.get_data(as_text=True)
     assert 'email' in resp.get_data(as_text=True)
     assert 'developer' in resp.get_data(as_text=True)
@@ -257,7 +280,7 @@ def test_login_view(client, user):
 
 def test_logout(client, admin_headers):
     """Test logout view"""
-    resp = client.get('/dashboard/logout')
+    resp = client.get('/dashboard/logout', headers=admin_headers)
     assert resp.status_code == 302
 
 

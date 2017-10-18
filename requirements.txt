@@ -5,3 +5,4 @@ Flask-Login
 Flask-WTF
 Flask-Principal
 passlib
+blinker
