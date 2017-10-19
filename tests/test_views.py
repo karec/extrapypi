@@ -98,8 +98,18 @@ def test_release_details(client, releases, admin_headers):
     assert res.status_code == 404
 
 
-def test_delete_package(client):
+def test_delete_package(client, releases_dirs, admin_headers):
     """Test delete of package"""
+    for r in releases_dirs:
+        res = client.get(
+            '/dashboard/packages/delete/%d' % r.package_id,
+            headers=admin_headers
+        )
+        assert res.status_code == 302
+
+    # bad package
+    res = client.get('/dashboard/packages/delete/99999', headers=admin_headers)
+    assert res.status_code == 404
 
 
 def test_package_upload_error(client, tmpdir, maintainer_headers):

@@ -16,9 +16,11 @@
           <li class="nav-item">
             <a class="nav-link" href="{{url_for('dashboard.index')}}">Dashboard <span class="sr-only">(current)</span></a>
           </li>
+          {% if current_user.is_admin %}
           <li class="nav-item">
             <a class="nav-link" href="{{url_for('dashboard.users_list')}}">Users</a>
           </li>
+          {% endif %}
         </ul>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item dropdown">

@@ -18,6 +18,25 @@ class BaseStorage(object):
         for key, value in six.iteritems(kwargs):
             setattr(self, key, value)
 
+    def delete_package(self, package):
+        """Must delete an entire package
+
+        :param models.Package package: package to delete
+        :return: True if deletion is successful or False
+        :rtype: bool
+        """
+        raise NotImplementedError()
+
+    def delete_release(self, package, version):
+        """Must delete all files of a package version
+
+        :param models.Package: package to delete
+        :param str version: version to delete
+        :return: True if deletion is successful or False
+        :rtype: bool
+        """
+        raise NotImplementedError()
+
     def create_package(self, package):
         """Must create a new location for a package
 

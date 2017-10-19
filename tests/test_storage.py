@@ -25,6 +25,12 @@ def test_base_storage():
     with pytest.raises(NotImplementedError):
         bs.create_release(None, None)
 
+    with pytest.raises(NotImplementedError):
+        bs.delete_release(None, None)
+
+    with pytest.raises(NotImplementedError):
+        bs.delete_package(None)
+
 
 def test_local_storage(app, db, tmpdir, releases, werkzeug_file):
     """Test local storage"""
@@ -49,12 +55,17 @@ def test_local_storage(app, db, tmpdir, releases, werkzeug_file):
     with open(f, 'r') as f:
         assert f.read() == "test-release"
 
+    assert ls.delete_release(package, '0.1') is True
+    assert ls.delete_package(package) is True
+
     # test with bad package
     package.name = "baddir"
     ls = LocalStorage(packages_root="bad/dir/location")
     assert ls.get_files(package) is None
     assert ls.create_package(package) is False
     assert ls.create_release(package, werkzeug_file) is False
+    assert ls.delete_release(package, '0.1') is False
+    assert ls.delete_package(package) is False
 
     f = ls.get_files(package)
     assert f is None

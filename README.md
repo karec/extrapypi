@@ -178,7 +178,7 @@ or directly updating your `pip.conf` file
 
 ```bash
 [global]
-extra-index-url = http://myserver.com/simple/
+extra-index-url = http://user:password@mypypiurl.org/simple/
 ```
 
 
@@ -220,5 +220,7 @@ pip install tox
 Then you can just run 
 
 ```
-tox
+tox -e sqlite
 ```
+
+You can also run tox in all envs if needed

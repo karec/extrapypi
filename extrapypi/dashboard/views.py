@@ -124,6 +124,21 @@ def release(package, release_id):
                            releases=releases)
 
 
+@blueprint.route('/packages/delete/<int:package_id>', methods=['GET'])
+@login_required
+@admin_permission.require()
+def delete_package(package_id):
+    """Delete a package, all its releases and all files and directory
+    associated with it
+    """
+    package = Package.query.get_or_404(package_id)
+    store = get_store(app.config['STORAGE'], app.config['STORAGE_PARAMS'])
+    if store.delete_package(package) is True:
+        db.session.delete(package)
+        db.session.commit()
+    return redirect(url_for("dashboard.index"))
+
+
 @blueprint.route('/users/', methods=['GET'])
 @login_required
 @admin_permission.require()

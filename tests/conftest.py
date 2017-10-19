@@ -232,6 +232,7 @@ def releases_dirs(app, request, db, admin_user):
 
     packages = [package_test, package_other]
 
+    releases = []
     for p in packages:
         r = Release(
             description="test",
@@ -244,18 +245,25 @@ def releases_dirs(app, request, db, admin_user):
         r.package = p
         with open(os.path.join(pdir, p.name, p.name + '-0.1.tar.gz'), 'w') as f:
             f.write("insidepackage")
-        db.session.add(r)
+        releases.append(r)
 
+    db.session.add_all(releases)
     db.session.commit()
 
     def fin():
+        packages = Package.query.filter(
+            Package.name.in_(['test-package', 'other-package'])
+        ).all()
         for p in packages:
             db.session.delete(p)
         db.session.commit()
 
-        shutil.rmtree(os.path.join(pdir, 'test-package'))
-        shutil.rmtree(os.path.join(pdir, 'other-package'))
+        if os.path.isdir(os.path.join(pdir, 'test-package')):
+            shutil.rmtree(os.path.join(pdir, 'test-package'))
+        if os.path.isdir(os.path.join(pdir, 'other-package')):
+            shutil.rmtree(os.path.join(pdir, 'other-package'))
     request.addfinalizer(fin)
+    return releases
 
 
 @pytest.fixture
