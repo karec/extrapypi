@@ -1,6 +1,5 @@
 import os
 
-import six
 import click
 from flask.cli import FlaskGroup
 from extrapypi.app import create_app
@@ -60,8 +59,14 @@ def init(user, password, pip_user, pip_pwd):
 @click.option('--filename', default='config.cfg', help="config file name")
 def init_config(filename):
     """create sample config file"""
+    from pkg_resources import resource_string
+    default_config = resource_string(
+        "extrapypi",
+        "data/default_config.cfg"
+    ).decode("utf-8")
+
     with open(filename, 'w') as f:
-        pass
+        f.write(default_config)
 
 
 @cli.command("create-user")

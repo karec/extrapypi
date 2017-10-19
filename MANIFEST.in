@@ -1,2 +1,3 @@
 graft extrapypi/templates
 graft extrapypi/static
+graft extrapypi/data
