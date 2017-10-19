@@ -11,9 +11,9 @@ extrapypi is just here to provide you an extra index to upload and install priva
 simply.
 
 
-* [Installation](#Installation)
-* [Deployment](#Deployment)
-* [Usage](#Usage)
+* [Installation](#installation)
+* [Deployment](#deployment)
+* [Usage](#usage)
 
 
 ## Features
