@@ -20,7 +20,7 @@ simply.
 
 * Upload packages from twine / setuptools
 * Install packages with pip using only extra-index option
-* Basics permissions management using roles (currently admin, developer, installer, builder)
+* Basics permissions management using roles (currently admin, developer, maitainer, installer)
 * Easy deployment / installation using the WSGI server you want
 * MySQL, PostgresSQL and SQLite support
 * Extensible storage system

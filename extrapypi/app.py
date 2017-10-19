@@ -25,7 +25,7 @@ import os
 import logging.config
 from flask import Flask
 
-from extrapypi.commons import login
+from extrapypi.commons import login, filters
 from extrapypi import simple, utils, dashboard, user
 from extrapypi.extensions import db, login_manager, csrf, principal
 
@@ -54,6 +54,7 @@ def create_app(testing=False, config=None):
     configure_logging(app)
     configure_extensions(app)
     register_blueprints(app)
+    register_filters(app)
 
     return app
 
@@ -71,6 +72,11 @@ def configure_extensions(app):
     login_manager.request_loader(login.load_user_from_request)
 
     principal.init_app(app)
+
+
+def register_filters(app):
+    """Register additionnal jinja2 filters"""
+    app.jinja_env.filters['tohtml'] = filters.tohtml
 
 
 def configure_app(app, testing, config):

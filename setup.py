@@ -1,14 +1,19 @@
+import os
+import sys
 from setuptools import setup, find_packages
 
+ROOT = os.path.realpath(os.path.join(os.path.dirname(
+    sys.modules['__main__'].__file__)))
 
 __version__ = '0.1'
 
 
 setup(
-    name="extra-pypi",
+    name="extrapypi",
     version=__version__,
     description='pypi server built on flask, aimed to be an extra index\
     for private dependencies, including basic permissions',
+    long_description=open(os.path.join(ROOT, 'README.rst')).read(),
     url='https://github.com/karec/extrapypi',
     author='karec',
     author_email='manu.valette@gmail.com',
@@ -30,6 +35,13 @@ setup(
     install_requires=[
         'Flask>=0.11',
         'Flask-SQLAlchemy',
+        'Flask-Migrate',
+        'Flask-Login',
+        'Flask-WTF',
+        'Flask-Principal',
+        'passlib',
+        'blinker',
+        'docutils'
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],

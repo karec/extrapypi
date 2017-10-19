@@ -4,6 +4,7 @@ from flask import Flask
 from flask_principal import Permission
 
 from extrapypi.app import configure_app
+from extrapypi.commons.filters import tohtml
 from extrapypi.commons.login import user_loader
 from extrapypi.commons.packages import get_store, create_package
 
@@ -19,6 +20,10 @@ def test_create_package_errors(app, client, badstore, monkeypatch):
     monkeypatch.setattr(Permission, 'test', pass_permission)
     with pytest.raises(RuntimeError):
         create_package("test", "test", badstore)
+
+
+def test_tohtml():
+    assert tohtml("*test*") == "<p><em>test</em></p>\n"
 
 
 def test_user_loader(admin_user):

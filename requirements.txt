@@ -6,3 +6,4 @@ Flask-WTF
 Flask-Principal
 passlib
 blinker
+docutils

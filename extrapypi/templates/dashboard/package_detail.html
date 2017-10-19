@@ -3,7 +3,7 @@
 <h1>{{release.package.name}} {{release.version}}</h1>
 <div class="row mt-xl-3">
   <div class="col">
-    {{release.description}}
+    {{release.description|tohtml|safe}}
   </div>
 </div>
 <div class="row mt-xl-3">
