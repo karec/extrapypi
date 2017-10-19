@@ -15,6 +15,7 @@ setup(
     for private dependencies, including basic permissions',
     long_description=open(os.path.join(ROOT, 'README.rst')).read(),
     url='https://github.com/karec/extrapypi',
+    download_url="https://github.com/karec/extrapypi/releases",
     author='karec',
     author_email='manu.valette@gmail.com',
     license='MIT',

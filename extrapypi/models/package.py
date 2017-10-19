@@ -26,7 +26,9 @@ class Package(db.Model):
     def sorted_releases(self):
         releases = self.releases.all()
         return sorted(
-            releases, key=lambda r: parse_version(r.version)
+            releases,
+            key=lambda r: parse_version(r.version),
+            reverse=True
         )
 
     @property
