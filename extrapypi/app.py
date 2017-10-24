@@ -108,8 +108,10 @@ def register_blueprints(app):
     csrf.exempt(simple.views.blueprint)
 
     app.register_blueprint(utils.views.blueprint)
-    app.register_blueprint(dashboard.views.blueprint)
-    app.register_blueprint(user.views.blueprint)
+
+    if app.config['DASHBOARD'] is True:
+        app.register_blueprint(dashboard.views.blueprint)
+        app.register_blueprint(user.views.blueprint)
 
 
 def configure_logging(app):

@@ -35,7 +35,7 @@ def init(user, password, pip_user, pip_pwd):
     pwd = custom_app_context.hash(password)
     user = models.User(
         username=user,
-        email="email@admin.com",
+        email="admin@email.com",
         password_hash=pwd,
         role='admin'
     )
@@ -43,7 +43,7 @@ def init(user, password, pip_user, pip_pwd):
     pip_pwd = custom_app_context.hash(pip_pwd)
     pip_usr = models.User(
         username=pip_user,
-        email="email@admin.com",
+        email="pip@email.com",
         password_hash=pip_pwd,
         role="installer"
     )

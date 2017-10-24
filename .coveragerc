@@ -2,6 +2,7 @@
 source =
        extrapypi
 omit =
+     docs/
      *tests*
      extrapypi/manage.py
      extrapypi/wsgi.py

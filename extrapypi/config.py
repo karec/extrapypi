@@ -1,6 +1,6 @@
 """
-Extra-pypi configuration
-========================
+Extrapypi configuration
+=======================
 
 All settings present here can be override with your own configuration file using
 the EXTRAPYPI_CONFIG env variable.
@@ -31,19 +31,56 @@ for example for packages location
 Configuration options
 
 
-================== ===========================
+================== ==============================================================================
 NAME               Description
-================== ===========================
+================== ==============================================================================
 BASE_DIR           Base directory, by default used by SQLALCHEMY_URI and PACKAGES_ROOT
-================== ===========================
 SQLALCHEMY_URI     SQLAlchemy connexion string
-================== ===========================
+DEBUG              Enable debug mode
 STATIC_URL         Url for static files
-================== ===========================
+SECRET_KEY         Secret key used for the application, you must update this
 STORAGE            Storage class name to use
-================== ===========================
 STORAGE_PARAMS     Storage class parameters, see specific storages documentation for more details
-================== ===========================
+DASHBOARD          You can disable dashboard if you set it to FALSE
+LOGGING_CONFIG     Logger configuration, using standard python dict config
+================== ==============================================================================
+
+Defaut logging config look like this
+
+.. code-block:: python
+
+   LOGGING_CONFIG = {
+    'version': 1,
+    'root': {
+        'level': 'NOTSET',
+        'handlers': ['default'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s: %(levelname)s / %(name)s] %(message)s',
+        },
+    },
+    'handlers': {
+        'default': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'extrapypi': {
+            'handlers': ['default'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'alembic.runtime.migration': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': False
+        },
+    }
+  }
+
 """
 import os
 
@@ -71,6 +108,8 @@ STORAGE_PARAMS = {
 WTF_CSRF_ENABLED = True
 WTF_CSRF_FIELD_NAME = 'csrf_token'
 
+DASHBOARD = True
+
 
 # Logging
 LOGGING_CONFIG = {
@@ -86,7 +125,7 @@ LOGGING_CONFIG = {
     },
     'handlers': {
         'default': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
@@ -94,7 +133,7 @@ LOGGING_CONFIG = {
     'loggers': {
         'extrapypi': {
             'handlers': ['default'],
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'propagate': False,
         },
         'alembic.runtime.migration': {
