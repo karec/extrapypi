@@ -1,4 +1,6 @@
 """Views for self-user management
+
+If you set ``DASHBOARD = False`` in settings, this blueprint will also be disabled
 """
 import logging
 from passlib.apps import custom_app_context

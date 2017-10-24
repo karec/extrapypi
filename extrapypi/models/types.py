@@ -1,4 +1,6 @@
 """Custom SQLAlchemy types / variants
+
+Use mysql.LONGTEXT instead of mysql.TEXT for UnicodeText type
 """
 from sqlalchemy.dialects import mysql
 

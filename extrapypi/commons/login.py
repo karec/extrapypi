@@ -14,11 +14,17 @@ from extrapypi.models import User
 
 
 def user_loader(user_id):
+    """Default user handler, from Flask-Login documentation
+    """
     return User.query.get(user_id)
 
 
 @identity_loaded.connect
 def on_identity_loaded(sender, identity):
+    """Load rights for flask-principal
+
+    Handle only role need and user need
+    """
     user = User.query.get(identity.id)
     identity.user = user
 
@@ -28,6 +34,9 @@ def on_identity_loaded(sender, identity):
 
 
 def load_user_from_request(request):
+    """Used to identify a request from pip or twine
+    when downloading / uploading packages and releases
+    """
     if request.authorization is None:
         return None
     username = request.authorization.get('username')

@@ -1,4 +1,6 @@
 """Views for dashboard
+
+All dashboard blueprint can be disabled if you set ``DASHBOARD = False`` in configuration
 """
 import logging
 from passlib.apps import custom_app_context
@@ -24,7 +26,7 @@ blueprint = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 @blueprint.route('/', methods=['GET'])
 @login_required
 def index():
-    """Dashboard index, listing packages
+    """Dashboard index, listing packages from database
     """
     packages = Package.query.all()
     return render_template("dashboard/index.html", packages=packages)
@@ -63,7 +65,7 @@ def login():
 def logout():
     """Logout view
 
-    Will redirect to login view
+    Will redirect to login view after logout current user
     """
     logout_user()
     return redirect(url_for('dashboard.login'))
@@ -74,6 +76,8 @@ def logout():
 @csrf.exempt
 def search():
     """Search page
+
+    Will use SQL Like syntax to search packages
     """
     name = request.form.get('search')
     packages = Package.query.filter(Package.name.ilike('%{}%'.format(name)))
@@ -179,6 +183,8 @@ def create_user():
 @login_required
 @admin_permission.require()
 def user_detail(user_id):
+    """View to update user from admin account
+    """
     user = User.query.get_or_404(user_id)
     form = UserForm(request.form, obj=user)
     form.role.choices = [(r, r) for r in User.ROLES]
@@ -196,6 +202,8 @@ def user_detail(user_id):
 @login_required
 @admin_permission.require()
 def delete_user(user_id):
+    """Delete a user and redirect to dashboard
+    """
     user = User.query.get_or_404(user_id)
     db.session.delete(user)
     db.session.commit()

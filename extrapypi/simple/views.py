@@ -29,7 +29,8 @@ blueprint = Blueprint('simple', __name__, url_prefix='/simple')
 def simple():
     """Simple view index used to list or upload packages
 
-    Used to list packages
+    Used to list packages. Simple index is generated on the fly based
+    on SQL data
     """
     if request.method == 'POST':
         action = request.form.get(':action')
@@ -56,6 +57,8 @@ def simple():
 @login_required
 @installer_permission.require()
 def package_view(package):
+    """List all files avaible for a package
+    """
     store = get_store(
         current_app.config['STORAGE'],
         current_app.config['STORAGE_PARAMS']
@@ -74,6 +77,8 @@ def package_view(package):
 @login_required
 @installer_permission.require()
 def download_package(package, source):
+    """Return a package file from storage
+    """
     store = get_store(
         current_app.config['STORAGE'],
         current_app.config['STORAGE_PARAMS']

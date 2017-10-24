@@ -3,7 +3,7 @@ LocalStorage
 ------------
 
 Simple local storage that create directories for packages and
-put releases files in it
+put releases files in it.
 """
 import os
 import re

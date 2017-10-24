@@ -1,4 +1,8 @@
 """Permissions and needs helpers
+
+Roles logic is defined like this :
+
+admin > developer > maintainer > installer
 """
 from flask_principal import Permission, RoleNeed
 

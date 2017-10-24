@@ -1,7 +1,19 @@
 """
-BaseStorage
+Base Storage
+------------
 
+BaseStorage define all methods needed by storages.
+All storage must be inherited from ``BaseStorage`` and implement the following methods
 
+* delete_package
+* delete_release
+* create_package
+* create_release
+* get_files
+* get_file
+
+Storages classes handle all packages and releases operation outside of the SQL database,
+this include storage of packages sources, listing of files, removing deleted packages, etc.
 """
 import six
 

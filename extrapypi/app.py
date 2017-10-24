@@ -19,7 +19,9 @@ You can create a wsgi file like this for running gunicorn or uwsgi :
 
     from extrapypi.app import create_app
 
-    application = create_app()
+    app = create_app()
+
+Or add any extra code if needed
 """
 import os
 import logging.config

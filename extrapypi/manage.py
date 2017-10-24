@@ -72,29 +72,33 @@ def init_config(filename):
 @cli.command("create-user")
 @click.argument("username", nargs=1)
 @click.argument("password", nargs=1)
-def create_user():
-    """Create a new user"""
+@click.argument("email", nargs=1)
+@click.option("--role", default='admin', type=click.Choice(['admin', 'developer', 'installer', 'maintainer']))
+def create_user(username, password, email, role):
+    """Create a new user. Default role is admin
+    """
+    from extrapypi.extrapypi import db
+    from extrapypi import models
+    pwd = custom_app_context.hash(password)
+    user = models.User(
+        username=username,
+        password_hash=pwd,
+        email=email,
+        role=role
+    )
+    db.session.add(user)
+    try:
+        db.session.commit()
+        click.echo("User %s created" % username)
+    except Exception:
+        click.echo("Cannot create user %s" % username)
+        db.rollback()
 
 
 @cli.command()
 def db():
     """Flask-migrate commands"""
     MigrateCommand()
-
-
-@cli.command("init-config")
-def init_config():
-    """Sample configuration file for extra-pypi"""
-
-
-@cli.command("wsgi-file")
-def init_wsgi_file():
-    """Sample wsgi file for extra-pypi"""
-
-
-@cli.command("get-static")
-def collect_static():
-    """Get static files location"""
 
 
 if __name__ == "__main__":
