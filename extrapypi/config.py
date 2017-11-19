@@ -19,13 +19,38 @@ for example for packages location
 .. note::
 
     If you use anything else than sqlite, you must install correct database drivers.
-    For conveniance, extra-pypi come with two meta packages extra-pypi[mysql] and extra-pypi[postgres]
+    For conveniance, extra-pypi come with two meta packages extrapypi[mysql] and extrapypi[postgres]
 
 
 .. note::
 
     You can also override all settings of flask extensions used by extra-pypi even if there are not
     here
+
+
+For quickstart you can generate a sample configuration file using ``start`` command like this
+
+.. code-block:: shell
+
+    extrapypi start --filename myconfig.cfg
+
+
+Generated file will have the following content
+
+.. code-block:: python
+
+    # Database connexion string
+    SQLALCHEMY_DATABASE_URI = "sqlite:///extrapypi.db"
+    
+    # Update this secret key for production !
+    SECRET_KEY = "changeit"
+
+    # Storage settings
+    # You need to update at least packages_root setting
+    STORAGE_PARAMS = {
+        'packages_root': "/path/to/my/packages"
+    }
+
 
 
 Configuration options

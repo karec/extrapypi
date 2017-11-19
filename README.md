@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/karec/extrapypi.svg?branch=master)](https://travis-ci.org/karec/extrapypi)
 [![Coverage Status](https://coveralls.io/repos/github/karec/extrapypi/badge.svg?branch=master)](https://coveralls.io/github/karec/extrapypi?branch=master)
+[![Documentation Status](https://readthedocs.org/projects/extrapypi/badge/?version=latest)](http://extrapypi.readthedocs.io/en/latest/?badge=latest)
 
 External pypi server with web ui and basics permissions management
 
