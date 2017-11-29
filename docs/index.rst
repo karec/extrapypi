@@ -12,6 +12,7 @@ Welcome to extrapypi's documentation!
    installation
    configuration
    deployment
+   extrapypi
 
 
 
