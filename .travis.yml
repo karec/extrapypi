@@ -16,8 +16,8 @@ before_script:
   - mysql -e "grant all privileges on testing.* to 'testing'@'localhost';"
 
 install:
-  - pip install tox
-  - pip install coveralls
+  - pip install -U tox
+  - pip install -U coveralls
 script:
   - tox
 after_success:
