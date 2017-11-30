@@ -1,46 +1,34 @@
-extrapypi\.models package
-=========================
+models
+======
 
-Submodules
-----------
-
-extrapypi\.models\.package module
----------------------------------
+package module
+--------------
 
 .. automodule:: extrapypi.models.package
     :members:
     :undoc-members:
     :show-inheritance:
 
-extrapypi\.models\.release module
----------------------------------
+release module
+--------------
 
 .. automodule:: extrapypi.models.release
     :members:
     :undoc-members:
     :show-inheritance:
 
-extrapypi\.models\.types module
--------------------------------
+types module
+------------
 
 .. automodule:: extrapypi.models.types
     :members:
     :undoc-members:
     :show-inheritance:
 
-extrapypi\.models\.user module
-------------------------------
+user module
+-----------
 
 .. automodule:: extrapypi.models.user
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: extrapypi.models
     :members:
     :undoc-members:
     :show-inheritance:

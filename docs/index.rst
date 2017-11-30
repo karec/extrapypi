@@ -1,10 +1,25 @@
-.. extrapypi documentation master file, created by
-   sphinx-quickstart on Tue Oct 24 21:05:59 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to extrapypi's documentation!
 =====================================
+
+External pypi server with web ui and basics permissions management
+extrapypi don't mirror official pypi packages, and will not. It's just not build with this goal in mind.
+Extrapypi is just here to provide you an extra index to upload and install private packages from your own index.
+
+Features
+--------
+
+* Upload packages from twine / setuptools
+* Install packages with pip using only extra-index option
+* Basics permissions management using roles (currently admin, developer, maitainer, installer)
+* Easy deployment / installation using the WSGI server you want
+* MySQL, PostgresSQL and SQLite support
+* Extensible storage system
+* CLI tools to help you deploy / init / test extrapypi
+* Basic dashboard to visualize packages and users
+
+
+Documentation
+-------------
 
 .. toctree::
    :maxdepth: 1
@@ -12,13 +27,5 @@ Welcome to extrapypi's documentation!
    installation
    configuration
    deployment
-   extrapypi
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   pip
+   api

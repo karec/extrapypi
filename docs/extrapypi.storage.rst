@@ -1,30 +1,18 @@
-extrapypi\.storage package
-==========================
+storage
+=======
 
-Submodules
-----------
-
-extrapypi\.storage\.base module
--------------------------------
+base module
+-----------
 
 .. automodule:: extrapypi.storage.base
     :members:
     :undoc-members:
     :show-inheritance:
 
-extrapypi\.storage\.local module
---------------------------------
+local module
+------------
 
 .. automodule:: extrapypi.storage.local
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: extrapypi.storage
     :members:
     :undoc-members:
     :show-inheritance:

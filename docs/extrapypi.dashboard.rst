@@ -1,22 +1,10 @@
-extrapypi\.dashboard package
-============================
+dashboard
+=========
 
-Submodules
-----------
-
-extrapypi\.dashboard\.views module
-----------------------------------
+views module
+------------
 
 .. automodule:: extrapypi.dashboard.views
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: extrapypi.dashboard
     :members:
     :undoc-members:
     :show-inheritance:

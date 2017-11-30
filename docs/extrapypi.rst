@@ -1,19 +1,5 @@
-extrapypi package
-=================
-
-Subpackages
------------
-
-.. toctree::
-
-    extrapypi.commons
-    extrapypi.dashboard
-    extrapypi.forms
-    extrapypi.models
-    extrapypi.simple
-    extrapypi.storage
-    extrapypi.user
-    extrapypi.utils
+extrapypi app
+=============
 
 extrapypi\.app module
 ---------------------

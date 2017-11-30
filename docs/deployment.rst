@@ -158,3 +158,11 @@ Last step is to configure nginx as a reverse proxy, basic configuration will loo
      }
    }
    ...
+
+
+Monitoring
+----------
+
+To make it simpler for you to check if extrapypi server is running with your monitoring tools, we provide a simple endpoint
+``/ping`` that will always return ``pong`` with status code ``200``.
+You must call this endpoint with ``GET`` http verb
