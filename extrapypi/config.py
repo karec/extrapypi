@@ -18,8 +18,9 @@ for example for packages location
 
 .. note::
 
-    If you use anything else than sqlite, you must install correct database drivers.
-    For conveniance, extra-pypi come with two meta packages extrapypi[mysql] and extrapypi[postgres]
+    If you use anything else than sqlite, you must install correct database drivers
+    like psycopg2 or pymysql for example. Since we use SQLAlchemy you can use any compliant database, but
+    we only test sqlite, mysql and postgresql
 
 
 .. note::
@@ -41,7 +42,7 @@ Generated file will have the following content
 
     # Database connexion string
     SQLALCHEMY_DATABASE_URI = "sqlite:///extrapypi.db"
-    
+
     # Update this secret key for production !
     SECRET_KEY = "changeit"
 

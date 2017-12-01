@@ -48,9 +48,7 @@ setup(
     tests_require=['pytest'],
     extras_require={
         'tests': ['pytest', 'pytest-flask'],
-        'docs': ['sphinx'],
-        'mysql': ['pymysql'],
-        'postgres': ['psycopg2']
+        'docs': ['sphinx']
     },
     entry_points={
         'console_scripts': [

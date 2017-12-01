@@ -23,7 +23,7 @@ simply.
 * Install packages with pip using only extra-index option
 * Basics permissions management using roles (currently admin, developer, maitainer, installer)
 * Easy deployment / installation using the WSGI server you want
-* MySQL, PostgresSQL and SQLite support
+* MySQL, PostgresSQL and SQLite support and tested
 * Extensible storage system
 * CLI tools to help you deploy / init / test extrapypi
 * Basic dashboard to visualize packages and users
@@ -44,23 +44,13 @@ You can install extrapypi with pip
 pip install extrapypi
 ```
 
-For mysql 
-
-```bash
-pip install extrapypi[mysql]
-```
-
-For postgresql
-
-```bash
-pip install extrapypi[postgres]
-```
-
 Or from source 
 
 ```bash
 python setup.py install
 ```
+
+**NOTE** if you want to use anything else than sqlite, you must download appropriate drivers (like psycopg2 for postgres)
 
 ## Deployment
 

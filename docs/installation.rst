@@ -11,17 +11,6 @@ Recommanded way to install extrapypi is to use the latest version hosted on PyPI
    pip install extrapypi
 
 
-Additionally, we provide 2 meta packages, one for mysql and one for postgresql
-
-.. code-block:: shell
-
-   pip install extrapypi[mysql]
-   pip install extrapypi[postgres]
-
-
-This will only install ``pymysql`` for mysql or ``psycopg2`` for postgres.
-
-
 Installing via git
 ------------------
 
@@ -73,3 +62,9 @@ After that you can start extrapypi using run command
 .. code-block:: shell
 
    EXTRAPYPI_CONFIG=/path/to/myconfig.cfg extrapypi run
+
+
+.. warning::
+
+   You will need proper database drivers if you want to use anything else than sqlite.
+   See http://docs.sqlalchemy.org/en/latest/dialects/ for more informations about avaible dialects
