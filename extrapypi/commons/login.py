@@ -1,7 +1,7 @@
 """Module handling all Flask-Login logic and handlers
 """
-from flask import current_app as app
 from passlib.apps import custom_app_context
+from flask import request, redirect, abort, url_for, current_app as app
 from flask_principal import (
     identity_loaded,
     RoleNeed,
@@ -17,6 +17,12 @@ def user_loader(user_id):
     """Default user handler, from Flask-Login documentation
     """
     return User.query.get(user_id)
+
+
+def unauthorized():
+    if request.blueprint == 'dashboard':
+        return redirect(url_for('dashboard.login', next=request.endpoint))
+    abort(401)
 
 
 @identity_loaded.connect

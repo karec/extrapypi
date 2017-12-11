@@ -97,6 +97,11 @@ def test_release_details(client, releases, admin_headers):
     res = client.get('/dashboard/test-package/99', headers=admin_headers)
     assert res.status_code == 404
 
+    # bad credentials
+    res = client.get('/dashboard', follow_redirects=True)
+    assert res.status_code == 200
+    assert b'Login to extrapypi' in res.data
+
 
 def test_delete_package(client, releases_dirs, admin_headers):
     """Test delete of package"""

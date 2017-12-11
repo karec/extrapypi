@@ -55,7 +55,11 @@ def login():
             identity=Identity(user.id)
         )
 
-        return redirect(url_for('dashboard.index'))
+        dest = request.args.get('next')
+        try:
+            return redirect(url_for(dest))
+        except:
+            return redirect(url_for('dashboard.index'))
 
     return render_template("login.html", form=form)
 

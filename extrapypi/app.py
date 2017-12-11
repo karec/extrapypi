@@ -72,6 +72,7 @@ def configure_extensions(app):
     login_manager.init_app(app)
     login_manager.user_loader(login.user_loader)
     login_manager.request_loader(login.load_user_from_request)
+    login_manager.unauthorized_handler(login.unauthorized)
 
     principal.init_app(app)
 
