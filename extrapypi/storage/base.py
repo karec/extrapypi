@@ -30,6 +30,14 @@ class BaseStorage(object):
         for key, value in six.iteritems(kwargs):
             setattr(self, key, value)
 
+    def list_packages(self):
+        """Must list all packages
+
+        :return: list of all packages contained in storage
+        :rtype: list
+        """
+        raise NotImplementedError()
+
     def delete_package(self, package):
         """Must delete an entire package
 

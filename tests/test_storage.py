@@ -31,6 +31,9 @@ def test_base_storage():
     with pytest.raises(NotImplementedError):
         bs.delete_package(None)
 
+    with pytest.raises(NotImplementedError):
+        bs.list_packages()
+
 
 def test_local_storage(app, db, tmpdir, releases, werkzeug_file):
     """Test local storage"""
