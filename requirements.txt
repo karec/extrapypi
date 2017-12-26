@@ -7,3 +7,4 @@ Flask-Principal
 passlib
 blinker
 docutils
+pkginfo

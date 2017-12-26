@@ -77,7 +77,7 @@ def init_config(filename):
 def create_user(username, password, email, role):
     """Create a new user. Default role is admin
     """
-    from extrapypi.extrapypi import db
+    from extrapypi.extensions import db
     from extrapypi import models
     pwd = custom_app_context.hash(password)
     user = models.User(
@@ -91,8 +91,29 @@ def create_user(username, password, email, role):
         db.session.commit()
         click.echo("User %s created" % username)
     except Exception:
-        click.echo("Cannot create user %s" % username)
+        click.echo("Cannot create user %s" % username, err=True)
         db.rollback()
+
+
+@cli.command("import")
+@click.option("--user", default="admin")
+def reimport(user):
+    from extrapypi import models
+    from flask import current_app as app
+    from extrapypi.commons.packages import get_store, create_release_from_source
+
+    user_obj = models.User.query.filter_by(username=user).first()
+    if user_obj is None:
+        click.echo("Unknow user %s" % user, err=True)
+
+    store = get_store(
+        app.config['STORAGE'],
+        app.config['STORAGE_PARAMS']
+    )
+
+    for package, metadata in store.get_releases_metadata():
+        create_release_from_source(metadata, user_obj)
+        click.echo("created %s release for % s" % (metadata['version'], package))
 
 
 @cli.command()

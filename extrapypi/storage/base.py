@@ -30,11 +30,11 @@ class BaseStorage(object):
         for key, value in six.iteritems(kwargs):
             setattr(self, key, value)
 
-    def list_packages(self):
-        """Must list all packages
+    def get_releases_metadata(self):
+        """Must return an iterable of tuples containing name of the package and release metadata
 
-        :return: list of all packages contained in storage
-        :rtype: list
+        :return: list of all distributions contained in storage
+        :rtype: iterable
         """
         raise NotImplementedError()
 

@@ -102,7 +102,7 @@ def package(package):
     release = p.latest_release
     store = get_store(app.config['STORAGE'], app.config['STORAGE_PARAMS'])
     files = store.get_files(p, release) or []
-    releases = [r for r in p.releases if r != release]
+    releases = [r for r in p.sorted_releases if r != release]
     return render_template("dashboard/package_detail.html",
                            release=release,
                            files=files,
@@ -125,7 +125,7 @@ def release(package, release_id):
 
     store = get_store(app.config['STORAGE'], app.config['STORAGE_PARAMS'])
     files = store.get_files(package, release) or []
-    releases = [r for r in package.releases if r != release]
+    releases = [r for r in package.sorted_releases if r != release]
     return render_template("dashboard/package_detail.html",
                            release=release,
                            files=files,

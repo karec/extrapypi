@@ -97,9 +97,9 @@ def create_release(data, config, files):
                            .first()
     if release is None:
         release = Release(
-            description=data['description'],
-            download_url=data['download_url'],
-            home_page=data['home_page'],
+            description=data.get('description', 'UNKNOWN'),
+            download_url=data.get('download_url', 'UNKNOW'),
+            home_page=data.get('home_page', 'UNKNOWN'),
             version=data['version'],
             keywords=data.get('keywords'),
             md5_digest=data['md5_digest'],
@@ -114,4 +114,52 @@ def create_release(data, config, files):
     except Exception:
         db.session.rollback()
         raise
+    return release
+
+
+def create_release_from_source(metadata, user):
+    """Create a new release from a raw file. Used for import of existing packages into database
+
+    .. warning::
+
+        This function does not check any permissions since it's never called from web ui
+
+    If a release already exists, it does nothing
+
+    :param dict metadata: metadata of the package
+    :param extrapypi.models.User user: user to use as maintainer
+    """
+    try:
+        package = Package.query.filter_by(name=metadata['name']).one()
+    except NoResultFound:
+        package = Package(
+            name=metadata['name'],
+            summary=metadata.get('summary', 'UNKNOWN')
+        )
+        db.session.add(package)
+
+    release = Release.query.filter_by(version=metadata['version'], package=package)\
+                           .first()
+
+    if release is None:
+        release = Release(
+            description=metadata.get('description', 'UNKNOWN'),
+            download_url=metadata.get('download_url', 'UNKNOW'),
+            home_page=metadata.get('home_page', 'UNKNOWN'),
+            version=metadata['version'],
+            keywords=metadata.get('keywords'),
+            md5_digest=metadata['md5_digest'],
+            package=package
+        )
+        db.session.add(release)
+
+    if user not in package.maintainers:
+        package.maintainers.append(user)
+
+    try:
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        raise
+
     return release

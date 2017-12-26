@@ -32,7 +32,7 @@ def test_base_storage():
         bs.delete_package(None)
 
     with pytest.raises(NotImplementedError):
-        bs.list_packages()
+        bs.get_releases_metadata()
 
 
 def test_local_storage(app, db, tmpdir, releases, werkzeug_file):
