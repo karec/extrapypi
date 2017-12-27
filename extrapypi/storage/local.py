@@ -40,9 +40,6 @@ class LocalStorage(BaseStorage):
         :return: generator
         :rtype: list
         """
-        if not os.path.isdir(self.packages_root):
-            return None
-
         for root, dirs, files in os.walk(self.packages_root):
             for f in files:
                 path = os.path.join(root, f)
