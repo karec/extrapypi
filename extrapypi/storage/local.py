@@ -24,7 +24,11 @@ class LocalStorage(BaseStorage):
         self.packages_root = packages_root
 
     def _get_metadata(self, release):
-        metadata = pkginfo.get_metadata(release).__dict__
+        try:
+            metadata = pkginfo.get_metadata(release).__dict__
+        except Exception:  # bad archive
+            metadata = {}
+
         md5_hash = md5()
 
         with open(release, 'rb') as fp:

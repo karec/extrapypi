@@ -52,7 +52,7 @@ def test_local_storage(app, db, tmpdir, releases, werkzeug_file):
     assert len(ls.get_files(package)) == 1
     assert ls.get_files(package)[0] == package.name + "-0.1.tar.gz"
     assert ls.create_release(package, werkzeug_file) is True
-    assert len(ls.get_files(package, package.releases[0])) == 1
+    assert len(ls.get_files(package, package.releases[0])) == 2
 
     f = ls.get_file(package, package.name + "-0.1.tar.gz")
     with open(f, 'r') as f:
@@ -60,6 +60,12 @@ def test_local_storage(app, db, tmpdir, releases, werkzeug_file):
 
     assert ls.delete_release(package, '0.1') is True
     assert ls.delete_package(package) is True
+
+    # test get releases metadata
+    metadata = list(ls.get_releases_metadata())
+    for path, meta in metadata:
+        assert 'test' in path
+        assert 'md5_digest' in meta
 
     # test with bad package
     package.name = "baddir"
