@@ -21,7 +21,7 @@ def app(tmpdir_factory):
     return app
 
 
-@pytest.fixture()
+@pytest.fixture(scope='session')
 def db(app, request):
 
     _db.app = app
