@@ -30,6 +30,14 @@ class BaseStorage(object):
         for key, value in six.iteritems(kwargs):
             setattr(self, key, value)
 
+    def get_releases_metadata(self):
+        """Must return an iterable of tuples containing name of the package and release metadata
+
+        :return: list of all distributions contained in storage
+        :rtype: iterable
+        """
+        raise NotImplementedError()
+
     def delete_package(self, package):
         """Must delete an entire package
 

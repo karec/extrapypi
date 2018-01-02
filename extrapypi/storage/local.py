@@ -7,7 +7,10 @@ put releases files in it.
 """
 import os
 import re
+import io
 import shutil
+import pkginfo
+from hashlib import md5
 
 from .base import BaseStorage
 
@@ -19,6 +22,32 @@ class LocalStorage(BaseStorage):
         if packages_root is None:
             raise RuntimeError("Cannot use LocalStorage without PACKAGES_ROOT set")
         self.packages_root = packages_root
+
+    def _get_metadata(self, release):
+        try:
+            metadata = pkginfo.get_metadata(release).__dict__
+        except Exception:  # bad archive
+            metadata = {}
+
+        md5_hash = md5()
+
+        with open(release, 'rb') as fp:
+            for content in iter(lambda: fp.read(io.DEFAULT_BUFFER_SIZE), b''):
+                md5_hash.update(content)
+
+        metadata.update({'md5_digest': md5_hash.hexdigest()})
+        return metadata
+
+    def get_releases_metadata(self):
+        """List all releases metadata from PACKAGES_ROOT
+
+        :return: generator
+        :rtype: list
+        """
+        for root, dirs, files in os.walk(self.packages_root):
+            for f in files:
+                path = os.path.join(root, f)
+                yield (os.path.basename(path), self._get_metadata(path))
 
     def delete_package(self, package):
         """Delete entire package directory
@@ -41,7 +70,7 @@ class LocalStorage(BaseStorage):
             return False
 
         files = os.listdir(path)
-        regex = '{}-(?P<version>[0-9\.]*)[\.-].*'.format(package.name)
+        regex = '.*-(?P<version>[0-9\.]*)[\.-].*'
         r = re.compile(regex)
         files = filter(
             lambda f: r.match(f) and r.match(f).group('version') == version,
@@ -93,7 +122,7 @@ class LocalStorage(BaseStorage):
 
         files = os.listdir(path)
         if release is not None:
-            regex = '{}-(?P<version>[0-9\.]*)[\.-].*'.format(package.name)
+            regex = '.*-(?P<version>[0-9\.]*)[\.-].*'.format(package.name)
             r = re.compile(regex)
             v = release.version
             files = filter(

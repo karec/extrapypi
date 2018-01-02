@@ -59,14 +59,15 @@ def simple():
 def package_view(package):
     """List all files avaible for a package
     """
-    store = get_store(
-        current_app.config['STORAGE'],
-        current_app.config['STORAGE_PARAMS']
-    )
     try:
         package_obj = Package.query.filter_by(name=package).one()
     except NoResultFound:
         abort(404, "package %s does not exists" % package)
+
+    store = get_store(
+        current_app.config['STORAGE'],
+        current_app.config['STORAGE_PARAMS']
+    )
 
     files = store.get_files(package_obj)
     return render_template("simple/package.html",
