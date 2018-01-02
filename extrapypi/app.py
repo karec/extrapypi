@@ -29,7 +29,7 @@ from flask import Flask
 
 from extrapypi.commons import login, filters
 from extrapypi import simple, utils, dashboard, user
-from extrapypi.extensions import db, login_manager, csrf, principal
+from extrapypi.extensions import db, login_manager, csrf, principal, migrate
 
 
 def create_app(testing=False, config=None):
@@ -75,6 +75,12 @@ def configure_extensions(app):
     login_manager.unauthorized_handler(login.unauthorized)
 
     principal.init_app(app)
+
+    migrations_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        'migrations'
+    )
+    migrate.init_app(app, db, directory=migrations_path)
 
 
 def register_filters(app):

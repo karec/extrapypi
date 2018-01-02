@@ -1,3 +1,4 @@
+from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_principal import Principal
 from flask_wtf.csrf import CSRFProtect
@@ -8,3 +9,4 @@ csrf = CSRFProtect()
 db = SQLAlchemy()
 login_manager = LoginManager()
 principal = Principal()
+migrate = Migrate()

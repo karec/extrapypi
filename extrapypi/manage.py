@@ -25,7 +25,8 @@ def cli():
 @click.option('--pip-pwd', default='pip', help="installer password")
 def init(user, password, pip_user, pip_pwd):
     """Init database and create an admin user"""
-    from extrapypi.extensions import db
+    from flask_migrate import stamp
+    from extrapypi.extensions import db, migrate
     from extrapypi import models
     click.echo("Creating database...")
     db.create_all()
@@ -53,6 +54,7 @@ def init(user, password, pip_user, pip_pwd):
     db.session.commit()
     click.echo("User %s created" % user.username)
     click.echo("User %s created" % pip_usr.username)
+    stamp(directory=migrate.directory)
 
 
 @cli.command("start")

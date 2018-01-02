@@ -73,7 +73,6 @@ def test_package_details(client, releases, admin_headers):
     assert b'test' in res.data
     assert b'0.1' in res.data
     assert b'test,other' in res.data
-    assert b'badmd5' in res.data
 
     # bad package
     res = client.get('/dashboard/bad-package/', headers=admin_headers)
@@ -91,7 +90,6 @@ def test_release_details(client, releases, admin_headers):
         assert b'test' in res.data
         assert b'0.1' in res.data
         assert b'test,other' in res.data
-        assert b'badmd5' in res.data
 
     # bad release
     res = client.get('/dashboard/test-package/99', headers=admin_headers)
@@ -130,7 +128,6 @@ def test_package_upload_error(client, tmpdir, maintainer_headers):
         'home_page': '',
         'version': '0.1',
         'keywords': ['test', 'other'],
-        'md5_digest': 'badhash',
         'file': (f.open('rb'), 'test-0.1.tar.gz')
     }
     resp = client.post('/simple/', headers=maintainer_headers, data=valid_data)
@@ -150,7 +147,6 @@ def test_package_upload(client, tmpdir, admin_headers, monkeypatch):
         'home_page': '',
         'version': '0.1',
         'keywords': ['test', 'other'],
-        'md5_digest': 'badhash',
         'file': (f.open('rb'), 'test-0.1.tar.gz')
     }
     resp = client.post('/simple/', headers=admin_headers, data=valid_data)

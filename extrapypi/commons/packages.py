@@ -102,7 +102,6 @@ def create_release(data, config, files):
             home_page=data.get('home_page', 'UNKNOWN'),
             version=data['version'],
             keywords=data.get('keywords'),
-            md5_digest=data['md5_digest'],
             package=package
         )
 
@@ -148,7 +147,6 @@ def create_release_from_source(metadata, user):
             home_page=metadata.get('home_page', 'UNKNOWN'),
             version=metadata['version'],
             keywords=metadata.get('keywords'),
-            md5_digest=metadata['md5_digest'],
             package=package
         )
         db.session.add(release)
