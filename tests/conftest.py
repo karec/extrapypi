@@ -199,7 +199,6 @@ def releases(db, request, admin_user, tmpdir):
             home_page="http://test",
             version="0.1",
             keywords="test,other",
-            md5_digest="badmd5"
         )
         r.package = p
         releases.append(r)
@@ -240,7 +239,6 @@ def releases_dirs(app, request, db, admin_user):
             home_page="http://test",
             version="0.1",
             keywords="test,other",
-            md5_digest="badmd5"
         )
         r.package = p
         with open(os.path.join(pdir, p.name, p.name + '-0.1.tar.gz'), 'w') as f:
