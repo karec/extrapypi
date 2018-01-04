@@ -17,8 +17,10 @@ depends_on = None
 
 
 def upgrade():
-    op.drop_column('release', 'md5_digest')
+    with op.batch_alter_table("release") as batch_op:
+        batch_op.drop_column('md5_digest')
 
 
 def downgrade():
-    op.add_column('release', sa.Column('md5_digest', sa.VARCHAR(length=32), nullable=False))
+    with op.batch_alter_table("release") as batch_op:
+        batch_op.add_column(sa.Column('md5_digest', sa.VARCHAR(length=32), nullable=False))
