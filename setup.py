@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 ROOT = os.path.realpath(os.path.join(os.path.dirname(
     sys.modules['__main__'].__file__)))
 
-__version__ = '0.2'
+__version__ = '0.3'
 
 
 setup(
